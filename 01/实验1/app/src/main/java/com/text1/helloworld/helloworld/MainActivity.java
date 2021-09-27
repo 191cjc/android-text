@@ -1,4 +1,4 @@
-package edu.fjnu.cse.helloworld;
+package com.text1.helloworld.helloworld;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
