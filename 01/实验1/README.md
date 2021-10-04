@@ -12,3 +12,5 @@
 ![QQ截图20211004132855.jpg](https://i.loli.net/2021/10/04/T42bBS1aAtyJfEK.jpg)
 6.然后就能在github上看到自己的文件了
 ![QQ截图20211004133106.jpg](https://i.loli.net/2021/10/04/126pkOB8fxa3NWZ.jpg)
+7.最后建一个hello world文件放入
+![QQ截图20211004160930.jpg](https://i.loli.net/2021/10/04/eHfQMq9iLjK4USR.jpg)

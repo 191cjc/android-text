@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <TableRow>
+
+        <TextView
+            android:layout_width="28dp"
+            android:layout_height="wrap_content"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Open..."
+            android:textColor="#A9A9A9"
+            android:textSize="30sp"></TextView>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="Ctrl-O"
+            android:textColor="#A9A9A9"
+            android:textSize="30sp"></TextView>
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:layout_width="28dp"
+            android:layout_height="wrap_content"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save..."
+            android:textColor="#A9A9A9"
+            android:textSize="30sp"></TextView>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="Ctrl-S"
+            android:textColor="#A9A9A9"
+            android:textSize="30sp"></TextView>
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:layout_width="28dp"
+            android:layout_height="wrap_content"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save As..."
+            android:textColor="#A9A9A9"
+            android:textSize="30sp"></TextView>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="Ctrl-Shit-S"
+            android:textColor="#A9A9A9"
+            android:textSize="30sp"></TextView>
+    </TableRow>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="#A9A9A9" />
+
+    <TableRow>
+
+        <TextView
+            android:layout_width="28dp"
+            android:layout_height="wrap_content"
+            android:text="X"
+            android:textColor="#A9A9A9"
+            android:textSize="30sp"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Import..."
+            android:textColor="#A9A9A9"
+            android:textSize="28sp"></TextView>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"></TextView>
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:layout_width="28dp"
+            android:layout_height="wrap_content"
+            android:text="X"
+            android:textColor="#A9A9A9"
+            android:textSize="28sp"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Export..."
+            android:textColor="#A9A9A9"
+            android:textSize="28sp"></TextView>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="Ctrl-E"
+            android:textColor="#A9A9A9"
+            android:textSize="30sp"></TextView>
+    </TableRow>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="#A9A9A9" />
+
+    <TableRow>
+
+        <TextView
+            android:layout_width="28dp"
+            android:layout_height="wrap_content"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" Quit"
+            android:textColor="#A9A9A9"
+            android:textSize="28sp"></TextView>
+    </TableRow>
+</TableLayout>
+
