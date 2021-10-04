@@ -1,7 +1,14 @@
-116052019125陈家纯
-1.git init
-2.git add .
-3.git commit -m "操作记录"
-4.配置ssh密钥
-5.git pull origin master,之后每次上传基本上都要用到
-6.git push origin master,上传完成
+### 实验1
+
+1.先输入git init
+由于本实验报告最后修改较晚，已经存在仓库![QQ截图20211004130734.jpg](https://i.loli.net/2021/10/04/mKlqEywxZvWkFsG.jpg)
+2.然后输入git add . 注意空格
+![QQ截图20211004131855.jpg](https://i.loli.net/2021/10/04/X4D6tP2neoEYucg.jpg)
+3.输入git commit -m "日志"
+![QQ截图20211004132525.jpg](https://i.loli.net/2021/10/04/LGsnQl7f3HKEOkv.jpg)
+4.配置好ssh keys
+![QQ截图20211004132126.jpg](https://i.loli.net/2021/10/04/TRobDvNknz6E1Ox.jpg)
+5.之后每次文件修改的时候要先敲入git pull origin master，再敲入git push origin master，第一次只用敲入后面的
+![QQ截图20211004132855.jpg](https://i.loli.net/2021/10/04/T42bBS1aAtyJfEK.jpg)
+6.然后就能在github上看到自己的文件了
+![QQ截图20211004133106.jpg](https://i.loli.net/2021/10/04/126pkOB8fxa3NWZ.jpg)
