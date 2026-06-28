@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>机甲小子本地实验壳</title>
+    <link rel="stylesheet" href="/public/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <aside class="panel">
+        <div class="title">
+          <strong>机甲小子</strong>
+          <span id="status">初始化</span>
+        </div>
+
+        <div class="group">
+          <button id="reloadGame" type="button">重载游戏</button>
+          <button id="useVanilla" type="button">原始资源</button>
+          <button id="useLocalMod" type="button">本地 Mod</button>
+        </div>
+
+        <div class="group compact">
+          <label>
+            <span>当前资源</span>
+            <output id="activeMod">vanilla</output>
+          </label>
+          <label>
+            <span>主文件</span>
+            <output id="swfFileName">L4399Main_gamefile.swf</output>
+          </label>
+        </div>
+
+        <div class="logHeader">
+          <span>请求日志</span>
+          <button id="refreshLog" type="button">刷新</button>
+        </div>
+        <ol id="requestLog" class="requestLog"></ol>
+      </aside>
+
+      <section class="stage">
+        <div id="player"></div>
+      </section>
+    </main>
+
+    <script src="/ruffle-config.js"></script>
+    <script src="/ruffle/ruffle.js"></script>
+    <script src="/public/pet-list.js"></script>
+    <script src="/public/dark-pet-panel.js"></script>
+    <script src="/public/renderer.js"></script>
+  </body>
+</html>

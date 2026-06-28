@@ -1,0 +1,156 @@
+:root {
+  color-scheme: dark;
+  font-family: "Microsoft YaHei", "Segoe UI", sans-serif;
+  background: #101214;
+  color: #eceff1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 1024px;
+  min-height: 680px;
+  background: #101214;
+}
+
+button {
+  height: 34px;
+  border: 1px solid #3a4249;
+  border-radius: 6px;
+  background: #20262b;
+  color: #f3f6f8;
+  font: inherit;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #2b3339;
+}
+
+.shell {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  height: 100vh;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  border-right: 1px solid #2b3136;
+  background: #15191d;
+  overflow: hidden;
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.title strong {
+  font-size: 18px;
+}
+
+.title span {
+  color: #9fb0bd;
+  font-size: 12px;
+}
+
+.group {
+  display: grid;
+  gap: 8px;
+}
+
+.compact {
+  padding: 10px;
+  border: 1px solid #2b3136;
+  border-radius: 8px;
+  background: #111519;
+}
+
+label {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 10px;
+  align-items: center;
+  min-width: 0;
+}
+
+label span {
+  color: #9fb0bd;
+  font-size: 12px;
+}
+
+output {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logHeader {
+  display: grid;
+  grid-template-columns: 1fr 72px;
+  gap: 10px;
+  align-items: center;
+}
+
+.requestLog {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+  font-size: 12px;
+}
+
+.requestLog li {
+  display: grid;
+  gap: 2px;
+  padding: 8px;
+  border: 1px solid #2b3136;
+  border-radius: 6px;
+  background: #111519;
+}
+
+.requestLog b {
+  color: #8fd0ff;
+  font-weight: 600;
+}
+
+.requestLog span {
+  overflow-wrap: anywhere;
+  color: #c4ccd2;
+}
+
+.stage {
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  overflow: auto;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    #0f1114;
+  background-size: 24px 24px;
+}
+
+#player {
+  width: 960px;
+  height: 600px;
+  background: #000;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.38);
+}
+
+ruffle-player,
+#rufflePlayer {
+  width: 960px;
+  height: 600px;
+}

@@ -1,0 +1,1734 @@
+{
+  "source": "assets\\exported\\xfbbv451\\binary\\13_DefineBinaryData.swf",
+  "signature": "CWS",
+  "version": 19,
+  "compressedSize": 5064035,
+  "declaredLength": 6105514,
+  "inflatedSize": 6105514,
+  "frame": {
+    "firstTagOffset": 13
+  },
+  "tagCounts": {
+    "FileAttributes": 1,
+    "SetBackgroundColor": 1,
+    "Tag86": 1,
+    "Tag65": 1,
+    "Tag45": 158,
+    "DefineSound": 3,
+    "DefineBitsLossless2": 34,
+    "DefineBitsJPEG3": 97,
+    "DefineShape2": 20,
+    "DefineFont3": 5,
+    "Tag73": 5,
+    "DefineFontName": 4,
+    "Tag37": 11,
+    "DefineSprite": 157,
+    "PlaceObject2": 3769,
+    "ShowFrame": 3103,
+    "End": 158,
+    "JPEGTables": 1,
+    "DefineBits": 12,
+    "DefineShape": 159,
+    "Tag83": 17,
+    "PlaceObject3": 179,
+    "Tag28": 36,
+    "DefineShape3": 7,
+    "DefineText": 12,
+    "DefineMorphShape": 3,
+    "FrameLabel": 15,
+    "Tag34": 1,
+    "DefineBitsJPEG2": 2,
+    "Tag74": 1,
+    "DoABC": 1,
+    "SymbolClass": 1
+  },
+  "assets": [
+    {
+      "id": 1,
+      "kind": "sound",
+      "tag": "DefineSound",
+      "file": "sounds/1_DefineSound.mp3",
+      "size": 1164538,
+      "soundFormat": 2,
+      "soundRate": 3,
+      "soundSize": 1,
+      "soundType": 1,
+      "sampleCount": 5135616,
+      "names": [
+        "mp3kaichang"
+      ]
+    },
+    {
+      "id": 2,
+      "kind": "sound",
+      "tag": "DefineSound",
+      "file": "sounds/2_DefineSound.mp3",
+      "size": 518,
+      "soundFormat": 2,
+      "soundRate": 2,
+      "soundSize": 1,
+      "soundType": 0,
+      "sampleCount": 2880,
+      "names": [
+        "mp_chupenga"
+      ]
+    },
+    {
+      "id": 3,
+      "kind": "sound",
+      "tag": "DefineSound",
+      "file": "sounds/3_DefineSound.mp3",
+      "size": 624,
+      "soundFormat": 2,
+      "soundRate": 1,
+      "soundSize": 1,
+      "soundType": 0,
+      "sampleCount": 522,
+      "names": [
+        "mp_anniua"
+      ]
+    },
+    {
+      "id": 4,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/4_DefineBitsLossless2.png",
+      "size": 38562,
+      "width": 341,
+      "height": 149,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 5,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/5_DefineBitsJPEG3.jpg",
+      "size": 4442,
+      "format": "jpg",
+      "alphaFile": "images/5_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 702,
+      "names": []
+    },
+    {
+      "id": 10,
+      "kind": "image",
+      "tag": "DefineBits",
+      "file": "images/10_DefineBits.jpg",
+      "size": 53775,
+      "format": "jpg",
+      "names": []
+    },
+    {
+      "id": 14,
+      "kind": "image",
+      "tag": "DefineBits",
+      "file": "images/14_DefineBits.jpg",
+      "size": 37285,
+      "format": "jpg",
+      "names": []
+    },
+    {
+      "id": 16,
+      "kind": "image",
+      "tag": "DefineBits",
+      "file": "images/16_DefineBits.jpg",
+      "size": 65416,
+      "format": "jpg",
+      "names": []
+    },
+    {
+      "id": 19,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/19_DefineBitsLossless2.png",
+      "size": 38745,
+      "width": 341,
+      "height": 149,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 23,
+      "kind": "image",
+      "tag": "DefineBits",
+      "file": "images/23_DefineBits.jpg",
+      "size": 99212,
+      "format": "jpg",
+      "names": []
+    },
+    {
+      "id": 24,
+      "kind": "image",
+      "tag": "DefineBits",
+      "file": "images/24_DefineBits.jpg",
+      "size": 167552,
+      "format": "jpg",
+      "names": []
+    },
+    {
+      "id": 28,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/28_DefineBitsJPEG3.jpg",
+      "size": 6103,
+      "format": "jpg",
+      "alphaFile": "images/28_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 883,
+      "names": []
+    },
+    {
+      "id": 30,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/30_DefineBitsJPEG3.jpg",
+      "size": 7114,
+      "format": "jpg",
+      "alphaFile": "images/30_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 4303,
+      "names": []
+    },
+    {
+      "id": 35,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/35_DefineBitsJPEG3.jpg",
+      "size": 2747,
+      "format": "jpg",
+      "alphaFile": "images/35_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 155,
+      "names": []
+    },
+    {
+      "id": 38,
+      "kind": "image",
+      "tag": "DefineBits",
+      "file": "images/38_DefineBits.jpg",
+      "size": 4595,
+      "format": "jpg",
+      "names": []
+    },
+    {
+      "id": 40,
+      "kind": "image",
+      "tag": "DefineBits",
+      "file": "images/40_DefineBits.jpg",
+      "size": 4375,
+      "format": "jpg",
+      "names": []
+    },
+    {
+      "id": 42,
+      "kind": "image",
+      "tag": "DefineBits",
+      "file": "images/42_DefineBits.jpg",
+      "size": 4514,
+      "format": "jpg",
+      "names": []
+    },
+    {
+      "id": 44,
+      "kind": "image",
+      "tag": "DefineBits",
+      "file": "images/44_DefineBits.jpg",
+      "size": 4615,
+      "format": "jpg",
+      "names": []
+    },
+    {
+      "id": 47,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/47_DefineBitsJPEG3.jpg",
+      "size": 1173,
+      "format": "jpg",
+      "alphaFile": "images/47_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 192,
+      "names": []
+    },
+    {
+      "id": 50,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/50_DefineBitsLossless2.png",
+      "size": 12642,
+      "width": 680,
+      "height": 90,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 60,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/60_DefineBitsJPEG3.jpg",
+      "size": 12056,
+      "format": "jpg",
+      "alphaFile": "images/60_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 3137,
+      "names": []
+    },
+    {
+      "id": 68,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/68_DefineBitsJPEG3.jpg",
+      "size": 19652,
+      "format": "jpg",
+      "alphaFile": "images/68_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 17707,
+      "names": []
+    },
+    {
+      "id": 73,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/73_DefineBitsJPEG3.jpg",
+      "size": 3423,
+      "format": "jpg",
+      "alphaFile": "images/73_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 680,
+      "names": []
+    },
+    {
+      "id": 75,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/75_DefineBitsJPEG3.jpg",
+      "size": 3289,
+      "format": "jpg",
+      "alphaFile": "images/75_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 1149,
+      "names": []
+    },
+    {
+      "id": 77,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/77_DefineBitsJPEG3.jpg",
+      "size": 3417,
+      "format": "jpg",
+      "alphaFile": "images/77_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 499,
+      "names": []
+    },
+    {
+      "id": 79,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/79_DefineBitsJPEG3.jpg",
+      "size": 3733,
+      "format": "jpg",
+      "alphaFile": "images/79_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 535,
+      "names": []
+    },
+    {
+      "id": 83,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/83_DefineBitsJPEG3.jpg",
+      "size": 1900,
+      "format": "jpg",
+      "alphaFile": "images/83_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 438,
+      "names": []
+    },
+    {
+      "id": 85,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/85_DefineBitsJPEG3.jpg",
+      "size": 1812,
+      "format": "jpg",
+      "alphaFile": "images/85_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 720,
+      "names": []
+    },
+    {
+      "id": 87,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/87_DefineBitsJPEG3.jpg",
+      "size": 1920,
+      "format": "jpg",
+      "alphaFile": "images/87_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 330,
+      "names": []
+    },
+    {
+      "id": 89,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/89_DefineBitsJPEG3.jpg",
+      "size": 1935,
+      "format": "jpg",
+      "alphaFile": "images/89_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 331,
+      "names": []
+    },
+    {
+      "id": 93,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/93_DefineBitsJPEG3.jpg",
+      "size": 1764,
+      "format": "jpg",
+      "alphaFile": "images/93_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 368,
+      "names": []
+    },
+    {
+      "id": 95,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/95_DefineBitsJPEG3.jpg",
+      "size": 1767,
+      "format": "jpg",
+      "alphaFile": "images/95_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 689,
+      "names": []
+    },
+    {
+      "id": 97,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/97_DefineBitsJPEG3.jpg",
+      "size": 1793,
+      "format": "jpg",
+      "alphaFile": "images/97_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 263,
+      "names": []
+    },
+    {
+      "id": 117,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/117_DefineBitsLossless2.png",
+      "size": 40285,
+      "width": 349,
+      "height": 150,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 121,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/121_DefineBitsLossless2.png",
+      "size": 39376,
+      "width": 341,
+      "height": 149,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 124,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/124_DefineBitsJPEG3.jpg",
+      "size": 3704,
+      "format": "jpg",
+      "alphaFile": "images/124_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 581,
+      "names": []
+    },
+    {
+      "id": 126,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/126_DefineBitsJPEG3.jpg",
+      "size": 1223,
+      "format": "jpg",
+      "alphaFile": "images/126_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 469,
+      "names": []
+    },
+    {
+      "id": 141,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/141_DefineBitsJPEG3.jpg",
+      "size": 2268,
+      "format": "jpg",
+      "alphaFile": "images/141_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 469,
+      "names": []
+    },
+    {
+      "id": 144,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/144_DefineBitsJPEG3.jpg",
+      "size": 14778,
+      "format": "jpg",
+      "alphaFile": "images/144_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 9057,
+      "names": []
+    },
+    {
+      "id": 146,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/146_DefineBitsJPEG3.jpg",
+      "size": 10686,
+      "format": "jpg",
+      "alphaFile": "images/146_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 4251,
+      "names": []
+    },
+    {
+      "id": 148,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/148_DefineBitsJPEG3.jpg",
+      "size": 4559,
+      "format": "jpg",
+      "alphaFile": "images/148_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 1689,
+      "names": []
+    },
+    {
+      "id": 149,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/149_DefineBitsJPEG3.jpg",
+      "size": 5305,
+      "format": "jpg",
+      "alphaFile": "images/149_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 1795,
+      "names": []
+    },
+    {
+      "id": 156,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/156_DefineBitsLossless2.png",
+      "size": 37616,
+      "width": 411,
+      "height": 137,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 158,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/158_DefineBitsLossless2.png",
+      "size": 39392,
+      "width": 411,
+      "height": 140,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 160,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/160_DefineBitsLossless2.png",
+      "size": 41157,
+      "width": 409,
+      "height": 142,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 162,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/162_DefineBitsLossless2.png",
+      "size": 42237,
+      "width": 407,
+      "height": 146,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 164,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/164_DefineBitsLossless2.png",
+      "size": 43111,
+      "width": 406,
+      "height": 147,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 166,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/166_DefineBitsLossless2.png",
+      "size": 43654,
+      "width": 404,
+      "height": 150,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 168,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/168_DefineBitsLossless2.png",
+      "size": 42923,
+      "width": 401,
+      "height": 147,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 170,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/170_DefineBitsLossless2.png",
+      "size": 41231,
+      "width": 398,
+      "height": 144,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 172,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/172_DefineBitsLossless2.png",
+      "size": 39803,
+      "width": 395,
+      "height": 141,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 174,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/174_DefineBitsLossless2.png",
+      "size": 38129,
+      "width": 393,
+      "height": 140,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 176,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/176_DefineBitsLossless2.png",
+      "size": 37031,
+      "width": 391,
+      "height": 139,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 178,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/178_DefineBitsLossless2.png",
+      "size": 37585,
+      "width": 394,
+      "height": 136,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 180,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/180_DefineBitsLossless2.png",
+      "size": 38320,
+      "width": 397,
+      "height": 134,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 182,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/182_DefineBitsLossless2.png",
+      "size": 38481,
+      "width": 399,
+      "height": 132,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 184,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/184_DefineBitsLossless2.png",
+      "size": 39222,
+      "width": 402,
+      "height": 131,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 186,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/186_DefineBitsLossless2.png",
+      "size": 38348,
+      "width": 404,
+      "height": 127,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 188,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/188_DefineBitsLossless2.png",
+      "size": 39090,
+      "width": 405,
+      "height": 129,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 190,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/190_DefineBitsLossless2.png",
+      "size": 38542,
+      "width": 406,
+      "height": 132,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 192,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/192_DefineBitsLossless2.png",
+      "size": 38239,
+      "width": 407,
+      "height": 134,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 194,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/194_DefineBitsLossless2.png",
+      "size": 37860,
+      "width": 409,
+      "height": 135,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 214,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/214_DefineBitsJPEG3.jpg",
+      "size": 43049,
+      "format": "jpg",
+      "alphaFile": "images/214_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 20069,
+      "names": []
+    },
+    {
+      "id": 216,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/216_DefineBitsJPEG3.jpg",
+      "size": 1454,
+      "format": "jpg",
+      "alphaFile": "images/216_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 257,
+      "names": []
+    },
+    {
+      "id": 218,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/218_DefineBitsJPEG3.jpg",
+      "size": 1996,
+      "format": "jpg",
+      "alphaFile": "images/218_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 1490,
+      "names": []
+    },
+    {
+      "id": 220,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/220_DefineBitsJPEG3.jpg",
+      "size": 1885,
+      "format": "jpg",
+      "alphaFile": "images/220_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 1003,
+      "names": []
+    },
+    {
+      "id": 224,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/224_DefineBitsJPEG3.jpg",
+      "size": 31429,
+      "format": "jpg",
+      "alphaFile": "images/224_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 17307,
+      "names": []
+    },
+    {
+      "id": 230,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/230_DefineBitsJPEG3.jpg",
+      "size": 41692,
+      "format": "jpg",
+      "alphaFile": "images/230_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 28356,
+      "names": []
+    },
+    {
+      "id": 236,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/236_DefineBitsJPEG3.jpg",
+      "size": 404,
+      "format": "jpg",
+      "alphaFile": "images/236_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 40,
+      "names": []
+    },
+    {
+      "id": 238,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/238_DefineBitsJPEG3.jpg",
+      "size": 2432,
+      "format": "jpg",
+      "alphaFile": "images/238_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 970,
+      "names": []
+    },
+    {
+      "id": 244,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/244_DefineBitsJPEG3.jpg",
+      "size": 41686,
+      "format": "jpg",
+      "alphaFile": "images/244_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 28356,
+      "names": []
+    },
+    {
+      "id": 247,
+      "kind": "image",
+      "tag": "DefineBits",
+      "file": "images/247_DefineBits.jpg",
+      "size": 55439,
+      "format": "jpg",
+      "names": []
+    },
+    {
+      "id": 249,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/249_DefineBitsJPEG3.jpg",
+      "size": 11018,
+      "format": "jpg",
+      "alphaFile": "images/249_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 5003,
+      "names": []
+    },
+    {
+      "id": 252,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/252_DefineBitsJPEG3.jpg",
+      "size": 3694,
+      "format": "jpg",
+      "alphaFile": "images/252_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 1782,
+      "names": []
+    },
+    {
+      "id": 253,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/253_DefineBitsJPEG3.jpg",
+      "size": 2103,
+      "format": "jpg",
+      "alphaFile": "images/253_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 1542,
+      "names": []
+    },
+    {
+      "id": 255,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/255_DefineBitsJPEG3.jpg",
+      "size": 24304,
+      "format": "jpg",
+      "alphaFile": "images/255_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 2011,
+      "names": []
+    },
+    {
+      "id": 258,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/258_DefineBitsJPEG3.jpg",
+      "size": 3282,
+      "format": "jpg",
+      "alphaFile": "images/258_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 1550,
+      "names": []
+    },
+    {
+      "id": 268,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/268_DefineBitsJPEG3.jpg",
+      "size": 1175,
+      "format": "jpg",
+      "alphaFile": "images/268_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 321,
+      "names": []
+    },
+    {
+      "id": 271,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/271_DefineBitsJPEG3.jpg",
+      "size": 12856,
+      "format": "jpg",
+      "alphaFile": "images/271_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 1067,
+      "names": []
+    },
+    {
+      "id": 273,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/273_DefineBitsJPEG3.jpg",
+      "size": 9451,
+      "format": "jpg",
+      "alphaFile": "images/273_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 3369,
+      "names": []
+    },
+    {
+      "id": 280,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/280_DefineBitsJPEG3.jpg",
+      "size": 42853,
+      "format": "jpg",
+      "alphaFile": "images/280_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 7676,
+      "names": []
+    },
+    {
+      "id": 285,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/285_DefineBitsJPEG3.jpg",
+      "size": 34507,
+      "format": "jpg",
+      "alphaFile": "images/285_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 12042,
+      "names": []
+    },
+    {
+      "id": 287,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/287_DefineBitsJPEG3.jpg",
+      "size": 1034,
+      "format": "jpg",
+      "alphaFile": "images/287_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 213,
+      "names": []
+    },
+    {
+      "id": 289,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/289_DefineBitsJPEG3.jpg",
+      "size": 848,
+      "format": "jpg",
+      "alphaFile": "images/289_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 164,
+      "names": []
+    },
+    {
+      "id": 291,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/291_DefineBitsJPEG3.jpg",
+      "size": 667,
+      "format": "jpg",
+      "alphaFile": "images/291_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 137,
+      "names": []
+    },
+    {
+      "id": 293,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/293_DefineBitsJPEG3.jpg",
+      "size": 469,
+      "format": "jpg",
+      "alphaFile": "images/293_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 97,
+      "names": []
+    },
+    {
+      "id": 297,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/297_DefineBitsJPEG3.jpg",
+      "size": 2122,
+      "format": "jpg",
+      "alphaFile": "images/297_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 1442,
+      "names": []
+    },
+    {
+      "id": 300,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/300_DefineBitsJPEG3.jpg",
+      "size": 1360,
+      "format": "jpg",
+      "alphaFile": "images/300_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 8979,
+      "names": []
+    },
+    {
+      "id": 302,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/302_DefineBitsJPEG3.jpg",
+      "size": 1279,
+      "format": "jpg",
+      "alphaFile": "images/302_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 8870,
+      "names": []
+    },
+    {
+      "id": 304,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/304_DefineBitsJPEG3.jpg",
+      "size": 1254,
+      "format": "jpg",
+      "alphaFile": "images/304_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 7818,
+      "names": []
+    },
+    {
+      "id": 306,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/306_DefineBitsJPEG3.jpg",
+      "size": 1267,
+      "format": "jpg",
+      "alphaFile": "images/306_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 6865,
+      "names": []
+    },
+    {
+      "id": 308,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/308_DefineBitsJPEG3.jpg",
+      "size": 1357,
+      "format": "jpg",
+      "alphaFile": "images/308_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 7449,
+      "names": []
+    },
+    {
+      "id": 310,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/310_DefineBitsJPEG3.jpg",
+      "size": 1433,
+      "format": "jpg",
+      "alphaFile": "images/310_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 7630,
+      "names": []
+    },
+    {
+      "id": 312,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/312_DefineBitsJPEG3.jpg",
+      "size": 1399,
+      "format": "jpg",
+      "alphaFile": "images/312_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 8107,
+      "names": []
+    },
+    {
+      "id": 314,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/314_DefineBitsJPEG3.jpg",
+      "size": 1392,
+      "format": "jpg",
+      "alphaFile": "images/314_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 8995,
+      "names": []
+    },
+    {
+      "id": 318,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/318_DefineBitsJPEG3.jpg",
+      "size": 11688,
+      "format": "jpg",
+      "alphaFile": "images/318_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 7312,
+      "names": []
+    },
+    {
+      "id": 319,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/319_DefineBitsJPEG3.jpg",
+      "size": 4047,
+      "format": "jpg",
+      "alphaFile": "images/319_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 5303,
+      "names": []
+    },
+    {
+      "id": 322,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/322_DefineBitsLossless2.png",
+      "size": 671,
+      "width": 40,
+      "height": 40,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 324,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/324_DefineBitsLossless2.png",
+      "size": 535,
+      "width": 30,
+      "height": 30,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 326,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/326_DefineBitsLossless2.png",
+      "size": 441,
+      "width": 23,
+      "height": 23,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 328,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/328_DefineBitsJPEG3.jpg",
+      "size": 473,
+      "format": "jpg",
+      "alphaFile": "images/328_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 97,
+      "names": []
+    },
+    {
+      "id": 334,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/334_DefineBitsJPEG3.jpg",
+      "size": 12963,
+      "format": "jpg",
+      "alphaFile": "images/334_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 7895,
+      "names": []
+    },
+    {
+      "id": 347,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/347_DefineBitsJPEG3.jpg",
+      "size": 3818,
+      "format": "jpg",
+      "alphaFile": "images/347_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 2248,
+      "names": []
+    },
+    {
+      "id": 349,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/349_DefineBitsJPEG3.jpg",
+      "size": 4483,
+      "format": "jpg",
+      "alphaFile": "images/349_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 2345,
+      "names": []
+    },
+    {
+      "id": 351,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/351_DefineBitsJPEG3.jpg",
+      "size": 3836,
+      "format": "jpg",
+      "alphaFile": "images/351_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 2164,
+      "names": []
+    },
+    {
+      "id": 354,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/354_DefineBitsJPEG3.jpg",
+      "size": 3917,
+      "format": "jpg",
+      "alphaFile": "images/354_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 2154,
+      "names": []
+    },
+    {
+      "id": 356,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/356_DefineBitsJPEG3.jpg",
+      "size": 4834,
+      "format": "jpg",
+      "alphaFile": "images/356_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 3204,
+      "names": []
+    },
+    {
+      "id": 358,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/358_DefineBitsJPEG3.jpg",
+      "size": 4119,
+      "format": "jpg",
+      "alphaFile": "images/358_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 2970,
+      "names": []
+    },
+    {
+      "id": 361,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/361_DefineBitsJPEG3.jpg",
+      "size": 11863,
+      "format": "jpg",
+      "alphaFile": "images/361_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 1506,
+      "names": []
+    },
+    {
+      "id": 363,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/363_DefineBitsLossless2.png",
+      "size": 418,
+      "width": 42,
+      "height": 41,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 365,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/365_DefineBitsLossless2.png",
+      "size": 588,
+      "width": 61,
+      "height": 59,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 367,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/367_DefineBitsLossless2.png",
+      "size": 252,
+      "width": 23,
+      "height": 23,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 370,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/370_DefineBitsJPEG3.jpg",
+      "size": 3145,
+      "format": "jpg",
+      "alphaFile": "images/370_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 403,
+      "names": []
+    },
+    {
+      "id": 371,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/371_DefineBitsJPEG3.jpg",
+      "size": 320,
+      "format": "jpg",
+      "alphaFile": "images/371_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 482,
+      "names": []
+    },
+    {
+      "id": 376,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/376_DefineBitsJPEG3.jpg",
+      "size": 11219,
+      "format": "jpg",
+      "alphaFile": "images/376_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 1697,
+      "names": []
+    },
+    {
+      "id": 380,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/380_DefineBitsJPEG3.jpg",
+      "size": 12843,
+      "format": "jpg",
+      "alphaFile": "images/380_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 8917,
+      "names": []
+    },
+    {
+      "id": 382,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/382_DefineBitsJPEG3.jpg",
+      "size": 1017,
+      "format": "jpg",
+      "alphaFile": "images/382_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 46,
+      "names": []
+    },
+    {
+      "id": 384,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/384_DefineBitsJPEG3.jpg",
+      "size": 1124,
+      "format": "jpg",
+      "alphaFile": "images/384_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 132,
+      "names": []
+    },
+    {
+      "id": 386,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/386_DefineBitsJPEG3.jpg",
+      "size": 1040,
+      "format": "jpg",
+      "alphaFile": "images/386_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 64,
+      "names": []
+    },
+    {
+      "id": 389,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/389_DefineBitsJPEG3.jpg",
+      "size": 988,
+      "format": "jpg",
+      "alphaFile": "images/389_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 46,
+      "names": []
+    },
+    {
+      "id": 391,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/391_DefineBitsJPEG3.jpg",
+      "size": 1127,
+      "format": "jpg",
+      "alphaFile": "images/391_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 132,
+      "names": []
+    },
+    {
+      "id": 393,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/393_DefineBitsJPEG3.jpg",
+      "size": 1004,
+      "format": "jpg",
+      "alphaFile": "images/393_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 64,
+      "names": []
+    },
+    {
+      "id": 397,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/397_DefineBitsJPEG3.jpg",
+      "size": 3704,
+      "format": "jpg",
+      "alphaFile": "images/397_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 16312,
+      "names": []
+    },
+    {
+      "id": 430,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/430_DefineBitsLossless2.png",
+      "size": 39578,
+      "width": 341,
+      "height": 149,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 435,
+      "kind": "image",
+      "tag": "DefineBitsJPEG2",
+      "file": "images/435_DefineBitsJPEG2.jpg",
+      "size": 59174,
+      "format": "jpg",
+      "names": []
+    },
+    {
+      "id": 442,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/442_DefineBitsJPEG3.jpg",
+      "size": 12398,
+      "format": "jpg",
+      "alphaFile": "images/442_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 15407,
+      "names": []
+    },
+    {
+      "id": 444,
+      "kind": "image",
+      "tag": "DefineBitsJPEG2",
+      "file": "images/444_DefineBitsJPEG2.jpg",
+      "size": 48789,
+      "format": "jpg",
+      "names": []
+    },
+    {
+      "id": 446,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/446_DefineBitsJPEG3.jpg",
+      "size": 46127,
+      "format": "jpg",
+      "alphaFile": "images/446_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 1286,
+      "names": []
+    },
+    {
+      "id": 448,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/448_DefineBitsJPEG3.jpg",
+      "size": 55787,
+      "format": "jpg",
+      "alphaFile": "images/448_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 1286,
+      "names": []
+    },
+    {
+      "id": 453,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/453_DefineBitsJPEG3.jpg",
+      "size": 9483,
+      "format": "jpg",
+      "alphaFile": "images/453_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 13199,
+      "names": []
+    },
+    {
+      "id": 455,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/455_DefineBitsJPEG3.jpg",
+      "size": 44742,
+      "format": "jpg",
+      "alphaFile": "images/455_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 1286,
+      "names": []
+    },
+    {
+      "id": 458,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/458_DefineBitsJPEG3.jpg",
+      "size": 93750,
+      "format": "jpg",
+      "alphaFile": "images/458_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 1286,
+      "names": []
+    },
+    {
+      "id": 460,
+      "kind": "image",
+      "tag": "DefineBits",
+      "file": "images/460_DefineBits.jpg",
+      "size": 62259,
+      "format": "jpg",
+      "names": []
+    },
+    {
+      "id": 463,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/463_DefineBitsJPEG3.jpg",
+      "size": 1404,
+      "format": "jpg",
+      "alphaFile": "images/463_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 3016,
+      "names": []
+    },
+    {
+      "id": 465,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/465_DefineBitsJPEG3.jpg",
+      "size": 1020,
+      "format": "jpg",
+      "alphaFile": "images/465_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 842,
+      "names": []
+    },
+    {
+      "id": 467,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/467_DefineBitsJPEG3.jpg",
+      "size": 1114,
+      "format": "jpg",
+      "alphaFile": "images/467_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 1111,
+      "names": []
+    },
+    {
+      "id": 469,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/469_DefineBitsJPEG3.jpg",
+      "size": 1020,
+      "format": "jpg",
+      "alphaFile": "images/469_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 842,
+      "names": []
+    },
+    {
+      "id": 472,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/472_DefineBitsJPEG3.jpg",
+      "size": 1169,
+      "format": "jpg",
+      "alphaFile": "images/472_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 992,
+      "names": []
+    },
+    {
+      "id": 474,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/474_DefineBitsJPEG3.jpg",
+      "size": 1173,
+      "format": "jpg",
+      "alphaFile": "images/474_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 1364,
+      "names": []
+    },
+    {
+      "id": 476,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/476_DefineBitsJPEG3.jpg",
+      "size": 1167,
+      "format": "jpg",
+      "alphaFile": "images/476_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 1302,
+      "names": []
+    },
+    {
+      "id": 479,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/479_DefineBitsJPEG3.jpg",
+      "size": 1159,
+      "format": "jpg",
+      "alphaFile": "images/479_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 951,
+      "names": []
+    },
+    {
+      "id": 481,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/481_DefineBitsJPEG3.jpg",
+      "size": 1180,
+      "format": "jpg",
+      "alphaFile": "images/481_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 1385,
+      "names": []
+    },
+    {
+      "id": 483,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/483_DefineBitsJPEG3.jpg",
+      "size": 1175,
+      "format": "jpg",
+      "alphaFile": "images/483_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 1261,
+      "names": []
+    },
+    {
+      "id": 494,
+      "kind": "image",
+      "tag": "DefineBits",
+      "file": "images/494_DefineBits.jpg",
+      "size": 140831,
+      "format": "jpg",
+      "names": []
+    },
+    {
+      "id": 526,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/526_DefineBitsJPEG3.jpg",
+      "size": 2170,
+      "format": "jpg",
+      "alphaFile": "images/526_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 2768,
+      "names": []
+    },
+    {
+      "id": 527,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/527_DefineBitsJPEG3.jpg",
+      "size": 7587,
+      "format": "jpg",
+      "alphaFile": "images/527_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 14862,
+      "names": []
+    },
+    {
+      "id": 530,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/530_DefineBitsLossless2.png",
+      "size": 279633,
+      "width": 791,
+      "height": 151,
+      "bitmapFormat": 5,
+      "names": []
+    },
+    {
+      "id": 537,
+      "kind": "image",
+      "tag": "DefineBitsLossless2",
+      "file": "images/537_DefineBitsLossless2.png",
+      "size": 41586,
+      "width": 341,
+      "height": 148,
+      "bitmapFormat": 5,
+      "names": []
+    }
+  ],
+  "symbols": [
+    {
+      "id": 540,
+      "name": "waring_zoubib"
+    },
+    {
+      "id": 536,
+      "name": "xiaojiazaijiemian"
+    },
+    {
+      "id": 525,
+      "name": "chushihua"
+    },
+    {
+      "id": 493,
+      "name": "kaichanmanhua"
+    },
+    {
+      "id": 433,
+      "name": "waring_zoubi"
+    },
+    {
+      "id": 429,
+      "name": "fengmian"
+    },
+    {
+      "id": 267,
+      "name": "jijiaxiaozi_fla.jm29_68"
+    },
+    {
+      "id": 143,
+      "name": "oTs_m"
+    },
+    {
+      "id": 123,
+      "name": "waring_lianjieshibai"
+    },
+    {
+      "id": 120,
+      "name": "waring_cundyic"
+    },
+    {
+      "id": 116,
+      "name": "jiazaijiemian"
+    },
+    {
+      "id": 22,
+      "name": "waring_doukai"
+    },
+    {
+      "id": 18,
+      "name": "dsfcz"
+    },
+    {
+      "id": 9,
+      "name": "waring_ltyitui"
+    },
+    {
+      "id": 3,
+      "name": "mp_anniua"
+    },
+    {
+      "id": 2,
+      "name": "mp_chupenga"
+    },
+    {
+      "id": 1,
+      "name": "mp3kaichang"
+    },
+    {
+      "id": 0,
+      "name": "Main"
+    }
+  ],
+  "exports": []
+}

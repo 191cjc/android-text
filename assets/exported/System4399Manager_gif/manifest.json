@@ -1,0 +1,35 @@
+{
+  "source": "assets\\exported\\xfbbv451\\binary\\1_DefineBinaryData.swf",
+  "signature": "CWS",
+  "version": 9,
+  "compressedSize": 10043,
+  "declaredLength": 10078,
+  "inflatedSize": 10078,
+  "frame": {
+    "firstTagOffset": 12
+  },
+  "tagCounts": {
+    "FileAttributes": 1,
+    "SetBackgroundColor": 1,
+    "DefineBitsJPEG3": 1,
+    "DefineShape": 1,
+    "PlaceObject2": 1,
+    "ShowFrame": 1,
+    "End": 1
+  },
+  "assets": [
+    {
+      "id": 1,
+      "kind": "image",
+      "tag": "DefineBitsJPEG3",
+      "file": "images/1_DefineBitsJPEG3.jpg",
+      "size": 6844,
+      "format": "jpg",
+      "alphaFile": "images/1_DefineBitsJPEG3.alpha.zlib",
+      "alphaSize": 3133,
+      "names": []
+    }
+  ],
+  "symbols": [],
+  "exports": []
+}

@@ -1,0 +1,12 @@
+.trellis/
+.cursor/
+.browser-data/
+node_modules/
+dist/
+build/
+*.log
+debug-*.png
+logs/
+tmp/
+tmp-*
+/.cache/

@@ -1,0 +1,1156 @@
+{
+  "source": "original\\external\\sbai.4399.com\\4399swf\\upload_swf\\ftp10\\honghao\\20130530\\27\\dataxmlvav447.swf",
+  "signature": "CWS",
+  "version": 11,
+  "compressedSize": 1132835,
+  "declaredLength": 37712839,
+  "inflatedSize": 37712839,
+  "frame": {
+    "firstTagOffset": 13
+  },
+  "tagCounts": {
+    "FileAttributes": 1,
+    "Metadata": 1,
+    "SetBackgroundColor": 1,
+    "Tag86": 1,
+    "DefineBinaryData": 75,
+    "DoABC": 1,
+    "SymbolClass": 1,
+    "ShowFrame": 1,
+    "End": 1
+  },
+  "assets": [
+    {
+      "id": 1,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/1_DefineBinaryData.bin",
+      "size": 3183,
+      "format": "bin",
+      "names": [
+        "DataXml_SpXl"
+      ]
+    },
+    {
+      "id": 2,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/2_DefineBinaryData.bin",
+      "size": 22554,
+      "format": "bin",
+      "names": [
+        "DataXml_paimingjiangliXml"
+      ]
+    },
+    {
+      "id": 3,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/3_DefineBinaryData.bin",
+      "size": 97757,
+      "format": "bin",
+      "names": [
+        "DataXml_jijiajinengXml"
+      ]
+    },
+    {
+      "id": 4,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/4_DefineBinaryData.bin",
+      "size": 131662,
+      "format": "bin",
+      "names": [
+        "DataXml_xmlSeedDoor"
+      ]
+    },
+    {
+      "id": 5,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/5_DefineBinaryData.bin",
+      "size": 37692,
+      "format": "bin",
+      "names": [
+        "DataXml_kxzXml"
+      ]
+    },
+    {
+      "id": 6,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/6_DefineBinaryData.bin",
+      "size": 649,
+      "format": "bin",
+      "names": [
+        "DataXml_ChHdXml"
+      ]
+    },
+    {
+      "id": 7,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/7_DefineBinaryData.bin",
+      "size": 167606,
+      "format": "bin",
+      "names": [
+        "DataXml_xmlRoompt"
+      ]
+    },
+    {
+      "id": 8,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/8_DefineBinaryData.bin",
+      "size": 296543,
+      "format": "bin",
+      "names": [
+        "DataXml_UnShopXml"
+      ]
+    },
+    {
+      "id": 9,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/9_DefineBinaryData.bin",
+      "size": 4518,
+      "format": "bin",
+      "names": [
+        "DataXml_shengxiaoXml"
+      ]
+    },
+    {
+      "id": 10,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/10_DefineBinaryData.bin",
+      "size": 999,
+      "format": "bin",
+      "names": [
+        "DataXml_jtzjlXml"
+      ]
+    },
+    {
+      "id": 11,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/11_DefineBinaryData.bin",
+      "size": 24624,
+      "format": "bin",
+      "names": [
+        "DataXml_xmlSceneem"
+      ]
+    },
+    {
+      "id": 12,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/12_DefineBinaryData.bin",
+      "size": 18429,
+      "format": "bin",
+      "names": [
+        "DataXml_SpGk"
+      ]
+    },
+    {
+      "id": 13,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/13_DefineBinaryData.bin",
+      "size": 855284,
+      "format": "bin",
+      "names": [
+        "DataXml_TaskSayXml"
+      ]
+    },
+    {
+      "id": 14,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/14_DefineBinaryData.bin",
+      "size": 2503692,
+      "format": "bin",
+      "names": [
+        "DataXml_xmlBullet"
+      ]
+    },
+    {
+      "id": 15,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/15_DefineBinaryData.bin",
+      "size": 4034675,
+      "format": "bin",
+      "names": [
+        "DataXml_GoodsXml"
+      ]
+    },
+    {
+      "id": 16,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/16_DefineBinaryData.bin",
+      "size": 17880,
+      "format": "bin",
+      "names": [
+        "DataXml_GiftXml"
+      ]
+    },
+    {
+      "id": 17,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/17_DefineBinaryData.bin",
+      "size": 17361633,
+      "format": "bin",
+      "names": [
+        "DataXml_xmlMSkill"
+      ]
+    },
+    {
+      "id": 18,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/18_DefineBinaryData.bin",
+      "size": 124758,
+      "format": "bin",
+      "names": [
+        "DataXml_chongwujinengxianshiyushuomingXml"
+      ]
+    },
+    {
+      "id": 19,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/19_DefineBinaryData.bin",
+      "size": 28370,
+      "format": "bin",
+      "names": [
+        "DataXml_xmlScenept"
+      ]
+    },
+    {
+      "id": 20,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/20_DefineBinaryData.bin",
+      "size": 76752,
+      "format": "bin",
+      "names": [
+        "DataXml_xmlMWskill"
+      ]
+    },
+    {
+      "id": 21,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/21_DefineBinaryData.bin",
+      "size": 779,
+      "format": "bin",
+      "names": [
+        "DataXml_ljdlXml"
+      ]
+    },
+    {
+      "id": 22,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/22_DefineBinaryData.bin",
+      "size": 8805,
+      "format": "bin",
+      "names": [
+        "DataXml_ZpXml"
+      ]
+    },
+    {
+      "id": 23,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/23_DefineBinaryData.bin",
+      "size": 117198,
+      "format": "bin",
+      "names": [
+        "DataXml_xmlFlashMpt"
+      ]
+    },
+    {
+      "id": 24,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/24_DefineBinaryData.bin",
+      "size": 3522,
+      "format": "bin",
+      "names": [
+        "DataXml_UnVipXml"
+      ]
+    },
+    {
+      "id": 25,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/25_DefineBinaryData.bin",
+      "size": 572389,
+      "format": "bin",
+      "names": [
+        "DataXml_nvqiangjinengjiemian"
+      ]
+    },
+    {
+      "id": 26,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/26_DefineBinaryData.bin",
+      "size": 22287,
+      "format": "bin",
+      "names": [
+        "DataXml_xmlRLevelA"
+      ]
+    },
+    {
+      "id": 27,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/27_DefineBinaryData.bin",
+      "size": 20754,
+      "format": "bin",
+      "names": [
+        "DataXml_ronghedengjishuxingXml"
+      ]
+    },
+    {
+      "id": 28,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/28_DefineBinaryData.bin",
+      "size": 15433,
+      "format": "bin",
+      "names": [
+        "DataXml_GeneChangeXml"
+      ]
+    },
+    {
+      "id": 29,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/29_DefineBinaryData.bin",
+      "size": 4480,
+      "format": "bin",
+      "names": [
+        "DataXml_GxSpXml"
+      ]
+    },
+    {
+      "id": 30,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/30_DefineBinaryData.bin",
+      "size": 447714,
+      "format": "bin",
+      "names": [
+        "DataXml_StrXml"
+      ]
+    },
+    {
+      "id": 31,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/31_DefineBinaryData.bin",
+      "size": 433730,
+      "format": "bin",
+      "names": [
+        "DataXml_ShopXml"
+      ]
+    },
+    {
+      "id": 32,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/32_DefineBinaryData.bin",
+      "size": 112377,
+      "format": "bin",
+      "names": [
+        "DataXml_JjQHSxXml"
+      ]
+    },
+    {
+      "id": 33,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/33_DefineBinaryData.bin",
+      "size": 11234,
+      "format": "bin",
+      "names": [
+        "DataXml_UnStSjXml"
+      ]
+    },
+    {
+      "id": 34,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/34_DefineBinaryData.bin",
+      "size": 542536,
+      "format": "bin",
+      "names": [
+        "DataXml_xmlRGskill"
+      ]
+    },
+    {
+      "id": 35,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/35_DefineBinaryData.bin",
+      "size": 4925,
+      "format": "bin",
+      "names": [
+        "DataXml_onLineXml"
+      ]
+    },
+    {
+      "id": 36,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/36_DefineBinaryData.bin",
+      "size": 30117,
+      "format": "bin",
+      "names": [
+        "DataXml_shangchengXml"
+      ]
+    },
+    {
+      "id": 37,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/37_DefineBinaryData.bin",
+      "size": 5959,
+      "format": "bin",
+      "names": [
+        "DataXml_SpLv"
+      ]
+    },
+    {
+      "id": 38,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/38_DefineBinaryData.bin",
+      "size": 415,
+      "format": "bin",
+      "names": [
+        "DataXml_JjJhXml"
+      ]
+    },
+    {
+      "id": 39,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/39_DefineBinaryData.bin",
+      "size": 583808,
+      "format": "bin",
+      "names": [
+        "DataXml_xmlGunSkill"
+      ]
+    },
+    {
+      "id": 40,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/40_DefineBinaryData.bin",
+      "size": 1279,
+      "format": "bin",
+      "names": [
+        "DataXml_GsMaxXml"
+      ]
+    },
+    {
+      "id": 41,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/41_DefineBinaryData.bin",
+      "size": 1190,
+      "format": "bin",
+      "names": [
+        "DataXml_shengxiaoduihuanXml"
+      ]
+    },
+    {
+      "id": 42,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/42_DefineBinaryData.bin",
+      "size": 9709,
+      "format": "bin",
+      "names": [
+        "DataXml_chongwuXml"
+      ]
+    },
+    {
+      "id": 43,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/43_DefineBinaryData.bin",
+      "size": 1869,
+      "format": "bin",
+      "names": [
+        "DataXml_QdXml"
+      ]
+    },
+    {
+      "id": 44,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/44_DefineBinaryData.bin",
+      "size": 10099,
+      "format": "bin",
+      "names": [
+        "DataXml_AnalysisXml"
+      ]
+    },
+    {
+      "id": 45,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/45_DefineBinaryData.bin",
+      "size": 1290172,
+      "format": "bin",
+      "names": [
+        "DataXml_chongwujinengXml"
+      ]
+    },
+    {
+      "id": 46,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/46_DefineBinaryData.bin",
+      "size": 4875,
+      "format": "bin",
+      "names": [
+        "DataXml_EdJlXml"
+      ]
+    },
+    {
+      "id": 47,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/47_DefineBinaryData.bin",
+      "size": 19463,
+      "format": "bin",
+      "names": [
+        "DataXml_SuitXml"
+      ]
+    },
+    {
+      "id": 48,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/48_DefineBinaryData.bin",
+      "size": 144769,
+      "format": "bin",
+      "names": [
+        "DataXml_JjSxXml"
+      ]
+    },
+    {
+      "id": 49,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/49_DefineBinaryData.bin",
+      "size": 6860,
+      "format": "bin",
+      "names": [
+        "DataXml_FbXml"
+      ]
+    },
+    {
+      "id": 50,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/50_DefineBinaryData.bin",
+      "size": 100539,
+      "format": "bin",
+      "names": [
+        "DataXml_xmlScene"
+      ]
+    },
+    {
+      "id": 51,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/51_DefineBinaryData.bin",
+      "size": 89991,
+      "format": "bin",
+      "names": [
+        "DataXml_xmlFlashMkn"
+      ]
+    },
+    {
+      "id": 52,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/52_DefineBinaryData.bin",
+      "size": 269970,
+      "format": "bin",
+      "names": [
+        "DataXml_xmlLevel"
+      ]
+    },
+    {
+      "id": 53,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/53_DefineBinaryData.bin",
+      "size": 393583,
+      "format": "bin",
+      "names": [
+        "DataXml_chongwuzidanXml"
+      ]
+    },
+    {
+      "id": 54,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/54_DefineBinaryData.bin",
+      "size": 2266,
+      "format": "bin",
+      "names": [
+        "DataXml_yixingzhanchangXml"
+      ]
+    },
+    {
+      "id": 55,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/55_DefineBinaryData.bin",
+      "size": 342365,
+      "format": "bin",
+      "names": [
+        "DataXml_xmlFlashM"
+      ]
+    },
+    {
+      "id": 56,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/56_DefineBinaryData.bin",
+      "size": 66247,
+      "format": "bin",
+      "names": [
+        "DataXml_chongwujinenglingwuXml"
+      ]
+    },
+    {
+      "id": 57,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/57_DefineBinaryData.bin",
+      "size": 1818432,
+      "format": "bin",
+      "names": [
+        "DataXml_TaskXml"
+      ]
+    },
+    {
+      "id": 58,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/58_DefineBinaryData.bin",
+      "size": 2768494,
+      "format": "bin",
+      "names": [
+        "DataXml_xmlMonster"
+      ]
+    },
+    {
+      "id": 59,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/59_DefineBinaryData.bin",
+      "size": 3321,
+      "format": "bin",
+      "names": [
+        "DataXml_ChXml"
+      ]
+    },
+    {
+      "id": 60,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/60_DefineBinaryData.bin",
+      "size": 8306,
+      "format": "bin",
+      "names": [
+        "DataXml_HosLv"
+      ]
+    },
+    {
+      "id": 61,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/61_DefineBinaryData.bin",
+      "size": 95334,
+      "format": "bin",
+      "names": [
+        "DataXml_xmlFlashMem"
+      ]
+    },
+    {
+      "id": 62,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/62_DefineBinaryData.bin",
+      "size": 12544,
+      "format": "bin",
+      "names": [
+        "DataXml_saijijiangli"
+      ]
+    },
+    {
+      "id": 63,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/63_DefineBinaryData.bin",
+      "size": 616720,
+      "format": "bin",
+      "names": [
+        "DataXml_nvqiangjineng"
+      ]
+    },
+    {
+      "id": 64,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/64_DefineBinaryData.bin",
+      "size": 3086,
+      "format": "bin",
+      "names": [
+        "DataXml_VipXml"
+      ]
+    },
+    {
+      "id": 65,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/65_DefineBinaryData.bin",
+      "size": 2898,
+      "format": "bin",
+      "names": [
+        "DataXml_ExpLv"
+      ]
+    },
+    {
+      "id": 66,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/66_DefineBinaryData.bin",
+      "size": 141218,
+      "format": "bin",
+      "names": [
+        "DataXml_xmlRoomkn"
+      ]
+    },
+    {
+      "id": 67,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/67_DefineBinaryData.bin",
+      "size": 144022,
+      "format": "bin",
+      "names": [
+        "DataXml_xmlRoomem"
+      ]
+    },
+    {
+      "id": 68,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/68_DefineBinaryData.bin",
+      "size": 458030,
+      "format": "bin",
+      "names": [
+        "DataXml_xmlRoom"
+      ]
+    },
+    {
+      "id": 69,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/69_DefineBinaryData.bin",
+      "size": 23749,
+      "format": "bin",
+      "names": [
+        "DataXml_xmlScenekn"
+      ]
+    },
+    {
+      "id": 70,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/70_DefineBinaryData.bin",
+      "size": 2863,
+      "format": "bin",
+      "names": [
+        "DataXml_EdXml"
+      ]
+    },
+    {
+      "id": 71,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/71_DefineBinaryData.bin",
+      "size": 751,
+      "format": "bin",
+      "names": [
+        "DataXml_zhangaiwuXml"
+      ]
+    },
+    {
+      "id": 72,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/72_DefineBinaryData.bin",
+      "size": 1225,
+      "format": "bin",
+      "names": [
+        "DataXml_treeXml"
+      ]
+    },
+    {
+      "id": 73,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/73_DefineBinaryData.bin",
+      "size": 68985,
+      "format": "bin",
+      "names": [
+        "DataXml_GoodsSkillXml"
+      ]
+    },
+    {
+      "id": 74,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/74_DefineBinaryData.bin",
+      "size": 1876,
+      "format": "bin",
+      "names": [
+        "DataXml_czjlXml"
+      ]
+    },
+    {
+      "id": 75,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/75_DefineBinaryData.bin",
+      "size": 22292,
+      "format": "bin",
+      "names": [
+        "DataXml_nvqiangdengjishuxing"
+      ]
+    }
+  ],
+  "symbols": [
+    {
+      "id": 75,
+      "name": "DataXml_nvqiangdengjishuxing"
+    },
+    {
+      "id": 74,
+      "name": "DataXml_czjlXml"
+    },
+    {
+      "id": 73,
+      "name": "DataXml_GoodsSkillXml"
+    },
+    {
+      "id": 72,
+      "name": "DataXml_treeXml"
+    },
+    {
+      "id": 71,
+      "name": "DataXml_zhangaiwuXml"
+    },
+    {
+      "id": 70,
+      "name": "DataXml_EdXml"
+    },
+    {
+      "id": 69,
+      "name": "DataXml_xmlScenekn"
+    },
+    {
+      "id": 68,
+      "name": "DataXml_xmlRoom"
+    },
+    {
+      "id": 67,
+      "name": "DataXml_xmlRoomem"
+    },
+    {
+      "id": 66,
+      "name": "DataXml_xmlRoomkn"
+    },
+    {
+      "id": 65,
+      "name": "DataXml_ExpLv"
+    },
+    {
+      "id": 64,
+      "name": "DataXml_VipXml"
+    },
+    {
+      "id": 63,
+      "name": "DataXml_nvqiangjineng"
+    },
+    {
+      "id": 62,
+      "name": "DataXml_saijijiangli"
+    },
+    {
+      "id": 61,
+      "name": "DataXml_xmlFlashMem"
+    },
+    {
+      "id": 60,
+      "name": "DataXml_HosLv"
+    },
+    {
+      "id": 59,
+      "name": "DataXml_ChXml"
+    },
+    {
+      "id": 58,
+      "name": "DataXml_xmlMonster"
+    },
+    {
+      "id": 57,
+      "name": "DataXml_TaskXml"
+    },
+    {
+      "id": 56,
+      "name": "DataXml_chongwujinenglingwuXml"
+    },
+    {
+      "id": 55,
+      "name": "DataXml_xmlFlashM"
+    },
+    {
+      "id": 54,
+      "name": "DataXml_yixingzhanchangXml"
+    },
+    {
+      "id": 53,
+      "name": "DataXml_chongwuzidanXml"
+    },
+    {
+      "id": 52,
+      "name": "DataXml_xmlLevel"
+    },
+    {
+      "id": 51,
+      "name": "DataXml_xmlFlashMkn"
+    },
+    {
+      "id": 50,
+      "name": "DataXml_xmlScene"
+    },
+    {
+      "id": 49,
+      "name": "DataXml_FbXml"
+    },
+    {
+      "id": 48,
+      "name": "DataXml_JjSxXml"
+    },
+    {
+      "id": 47,
+      "name": "DataXml_SuitXml"
+    },
+    {
+      "id": 46,
+      "name": "DataXml_EdJlXml"
+    },
+    {
+      "id": 45,
+      "name": "DataXml_chongwujinengXml"
+    },
+    {
+      "id": 44,
+      "name": "DataXml_AnalysisXml"
+    },
+    {
+      "id": 43,
+      "name": "DataXml_QdXml"
+    },
+    {
+      "id": 42,
+      "name": "DataXml_chongwuXml"
+    },
+    {
+      "id": 41,
+      "name": "DataXml_shengxiaoduihuanXml"
+    },
+    {
+      "id": 40,
+      "name": "DataXml_GsMaxXml"
+    },
+    {
+      "id": 39,
+      "name": "DataXml_xmlGunSkill"
+    },
+    {
+      "id": 38,
+      "name": "DataXml_JjJhXml"
+    },
+    {
+      "id": 37,
+      "name": "DataXml_SpLv"
+    },
+    {
+      "id": 36,
+      "name": "DataXml_shangchengXml"
+    },
+    {
+      "id": 35,
+      "name": "DataXml_onLineXml"
+    },
+    {
+      "id": 34,
+      "name": "DataXml_xmlRGskill"
+    },
+    {
+      "id": 33,
+      "name": "DataXml_UnStSjXml"
+    },
+    {
+      "id": 32,
+      "name": "DataXml_JjQHSxXml"
+    },
+    {
+      "id": 31,
+      "name": "DataXml_ShopXml"
+    },
+    {
+      "id": 30,
+      "name": "DataXml_StrXml"
+    },
+    {
+      "id": 29,
+      "name": "DataXml_GxSpXml"
+    },
+    {
+      "id": 28,
+      "name": "DataXml_GeneChangeXml"
+    },
+    {
+      "id": 27,
+      "name": "DataXml_ronghedengjishuxingXml"
+    },
+    {
+      "id": 26,
+      "name": "DataXml_xmlRLevelA"
+    },
+    {
+      "id": 25,
+      "name": "DataXml_nvqiangjinengjiemian"
+    },
+    {
+      "id": 24,
+      "name": "DataXml_UnVipXml"
+    },
+    {
+      "id": 23,
+      "name": "DataXml_xmlFlashMpt"
+    },
+    {
+      "id": 22,
+      "name": "DataXml_ZpXml"
+    },
+    {
+      "id": 21,
+      "name": "DataXml_ljdlXml"
+    },
+    {
+      "id": 20,
+      "name": "DataXml_xmlMWskill"
+    },
+    {
+      "id": 19,
+      "name": "DataXml_xmlScenept"
+    },
+    {
+      "id": 18,
+      "name": "DataXml_chongwujinengxianshiyushuomingXml"
+    },
+    {
+      "id": 17,
+      "name": "DataXml_xmlMSkill"
+    },
+    {
+      "id": 16,
+      "name": "DataXml_GiftXml"
+    },
+    {
+      "id": 15,
+      "name": "DataXml_GoodsXml"
+    },
+    {
+      "id": 14,
+      "name": "DataXml_xmlBullet"
+    },
+    {
+      "id": 13,
+      "name": "DataXml_TaskSayXml"
+    },
+    {
+      "id": 12,
+      "name": "DataXml_SpGk"
+    },
+    {
+      "id": 11,
+      "name": "DataXml_xmlSceneem"
+    },
+    {
+      "id": 10,
+      "name": "DataXml_jtzjlXml"
+    },
+    {
+      "id": 9,
+      "name": "DataXml_shengxiaoXml"
+    },
+    {
+      "id": 8,
+      "name": "DataXml_UnShopXml"
+    },
+    {
+      "id": 7,
+      "name": "DataXml_xmlRoompt"
+    },
+    {
+      "id": 6,
+      "name": "DataXml_ChHdXml"
+    },
+    {
+      "id": 5,
+      "name": "DataXml_kxzXml"
+    },
+    {
+      "id": 4,
+      "name": "DataXml_xmlSeedDoor"
+    },
+    {
+      "id": 3,
+      "name": "DataXml_jijiajinengXml"
+    },
+    {
+      "id": 2,
+      "name": "DataXml_paimingjiangliXml"
+    },
+    {
+      "id": 1,
+      "name": "DataXml_SpXl"
+    },
+    {
+      "id": 0,
+      "name": "DataXml"
+    }
+  ],
+  "exports": []
+}

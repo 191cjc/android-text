@@ -1,0 +1,251 @@
+{
+  "source": "modified/local/xfbbv451.swf",
+  "signature": "CWS",
+  "version": 19,
+  "compressedSize": 5285433,
+  "declaredLength": 5474335,
+  "inflatedSize": 5474335,
+  "frame": {
+    "firstTagOffset": 13
+  },
+  "tagCounts": {
+    "FileAttributes": 1,
+    "Metadata": 1,
+    "Tag65": 1,
+    "SetBackgroundColor": 1,
+    "Tag41": 1,
+    "FrameLabel": 2,
+    "DefineBinaryData": 11,
+    "DoABC": 2,
+    "SymbolClass": 2,
+    "ShowFrame": 3,
+    "DefineShape3": 1,
+    "DefineSprite": 1,
+    "PlaceObject2": 1,
+    "End": 2,
+    "ExportAssets": 1
+  },
+  "assets": [
+    {
+      "id": 1,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/1_DefineBinaryData.swf",
+      "size": 10043,
+      "format": "swf",
+      "names": [
+        "prefor.System4399Manager__4399Gif"
+      ]
+    },
+    {
+      "id": 2,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/2_DefineBinaryData.bin",
+      "size": 269,
+      "format": "bin",
+      "names": [
+        "prefor.System4399Manager_BaseFile"
+      ]
+    },
+    {
+      "id": 5,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/5_DefineBinaryData.bin",
+      "size": 1270,
+      "format": "bin",
+      "names": [
+        "mx.graphics.shaderClasses.LuminosityShader_ShaderClass",
+        "mx.graphics.shaderClasses.LuminosityShader_ShaderClass"
+      ]
+    },
+    {
+      "id": 6,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/6_DefineBinaryData.bin",
+      "size": 1062,
+      "format": "bin",
+      "names": [
+        "mx.graphics.shaderClasses.ColorDodgeShader_ShaderClass",
+        "mx.graphics.shaderClasses.ColorDodgeShader_ShaderClass"
+      ]
+    },
+    {
+      "id": 7,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/7_DefineBinaryData.bin",
+      "size": 1260,
+      "format": "bin",
+      "names": [
+        "mx.graphics.shaderClasses.ColorShader_ShaderClass",
+        "mx.graphics.shaderClasses.ColorShader_ShaderClass"
+      ]
+    },
+    {
+      "id": 8,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/8_DefineBinaryData.bin",
+      "size": 2256,
+      "format": "bin",
+      "names": [
+        "mx.graphics.shaderClasses.HueShader_ShaderClass",
+        "mx.graphics.shaderClasses.HueShader_ShaderClass"
+      ]
+    },
+    {
+      "id": 9,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/9_DefineBinaryData.bin",
+      "size": 1132,
+      "format": "bin",
+      "names": [
+        "mx.graphics.shaderClasses.ColorBurnShader_ShaderClass",
+        "mx.graphics.shaderClasses.ColorBurnShader_ShaderClass"
+      ]
+    },
+    {
+      "id": 10,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/10_DefineBinaryData.bin",
+      "size": 612,
+      "format": "bin",
+      "names": [
+        "mx.graphics.shaderClasses.ExclusionShader_ShaderClass",
+        "mx.graphics.shaderClasses.ExclusionShader_ShaderClass"
+      ]
+    },
+    {
+      "id": 11,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/11_DefineBinaryData.bin",
+      "size": 1908,
+      "format": "bin",
+      "names": [
+        "mx.graphics.shaderClasses.SoftLightShader_ShaderClass",
+        "mx.graphics.shaderClasses.SoftLightShader_ShaderClass"
+      ]
+    },
+    {
+      "id": 12,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/12_DefineBinaryData.bin",
+      "size": 2286,
+      "format": "bin",
+      "names": [
+        "mx.graphics.shaderClasses.SaturationShader_ShaderClass",
+        "mx.graphics.shaderClasses.SaturationShader_ShaderClass"
+      ]
+    },
+    {
+      "id": 13,
+      "kind": "binary",
+      "tag": "DefineBinaryData",
+      "file": "binary/13_DefineBinaryData.swf",
+      "size": 5089928,
+      "format": "swf",
+      "names": [
+        "L4399Main_gamefile"
+      ]
+    }
+  ],
+  "symbols": [
+    {
+      "id": 1,
+      "name": "prefor.System4399Manager__4399Gif"
+    },
+    {
+      "id": 2,
+      "name": "prefor.System4399Manager_BaseFile"
+    },
+    {
+      "id": 0,
+      "name": "prefor.System4399Manager"
+    },
+    {
+      "id": 8,
+      "name": "mx.graphics.shaderClasses.HueShader_ShaderClass"
+    },
+    {
+      "id": 10,
+      "name": "mx.graphics.shaderClasses.ExclusionShader_ShaderClass"
+    },
+    {
+      "id": 6,
+      "name": "mx.graphics.shaderClasses.ColorDodgeShader_ShaderClass"
+    },
+    {
+      "id": 7,
+      "name": "mx.graphics.shaderClasses.ColorShader_ShaderClass"
+    },
+    {
+      "id": 9,
+      "name": "mx.graphics.shaderClasses.ColorBurnShader_ShaderClass"
+    },
+    {
+      "id": 13,
+      "name": "L4399Main_gamefile"
+    },
+    {
+      "id": 5,
+      "name": "mx.graphics.shaderClasses.LuminosityShader_ShaderClass"
+    },
+    {
+      "id": 4,
+      "name": "_class_embed_css_Assets_swf_43848611_mx_skins_cursor_BusyCursor_213286499"
+    },
+    {
+      "id": 11,
+      "name": "mx.graphics.shaderClasses.SoftLightShader_ShaderClass"
+    },
+    {
+      "id": 12,
+      "name": "mx.graphics.shaderClasses.SaturationShader_ShaderClass"
+    }
+  ],
+  "exports": [
+    {
+      "id": 4,
+      "name": "mx.skins.cursor.BusyCursor"
+    },
+    {
+      "id": 5,
+      "name": "mx.graphics.shaderClasses.LuminosityShader_ShaderClass"
+    },
+    {
+      "id": 6,
+      "name": "mx.graphics.shaderClasses.ColorDodgeShader_ShaderClass"
+    },
+    {
+      "id": 7,
+      "name": "mx.graphics.shaderClasses.ColorShader_ShaderClass"
+    },
+    {
+      "id": 8,
+      "name": "mx.graphics.shaderClasses.HueShader_ShaderClass"
+    },
+    {
+      "id": 9,
+      "name": "mx.graphics.shaderClasses.ColorBurnShader_ShaderClass"
+    },
+    {
+      "id": 10,
+      "name": "mx.graphics.shaderClasses.ExclusionShader_ShaderClass"
+    },
+    {
+      "id": 11,
+      "name": "mx.graphics.shaderClasses.SoftLightShader_ShaderClass"
+    },
+    {
+      "id": 12,
+      "name": "mx.graphics.shaderClasses.SaturationShader_ShaderClass"
+    }
+  ]
+}

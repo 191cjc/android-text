@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<进化>
+		<id>1</id>
+		<等级>2</等级>
+		<需求经验>1577</需求经验>
+	</进化>
+	<进化>
+		<id>2</id>
+		<等级>3</等级>
+		<需求经验>6105</需求经验>
+	</进化>
+	<进化>
+		<id>3</id>
+		<等级>4</等级>
+		<需求经验>13652</需求经验>
+	</进化>
+</info>
