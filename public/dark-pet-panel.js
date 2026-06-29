@@ -74,6 +74,18 @@
     currencyEnabled: false,
     currencyValue: 0,
     currencyLastReadAt: 0,
+    starDiamondEnabled: false,
+    starDiamondValue: 0,
+    starDiamondLastReadAt: 0,
+    vipExpEnabled: false,
+    vipExpValue: 0,
+    vipExpLastReadAt: 0,
+    stageAchEnabled: false,
+    stageAchValue: 0,
+    stageAchLastReadAt: 0,
+    eggHatchEnabled: false,
+    eggHatchPetId: darkPet.id,
+    eggHatchLastReadAt: 0,
     logs: [],
   };
 
@@ -107,7 +119,7 @@
 
   function normalizeState(value) {
     const source = value && typeof value === "object" ? value : {};
-    const allowedTabs = BAG_UI_ENABLED ? ["pet", "bag", "currency", "params", "logs"] : ["pet", "currency", "params", "logs"];
+    const allowedTabs = BAG_UI_ENABLED ? ["pet", "bag", "currency", "vip", "level", "params", "logs"] : ["pet", "currency", "vip", "level", "params", "logs"];
     const activeTab = allowedTabs.includes(source.activeTab)
       ? source.activeTab
       : source.activeTab === "monitor"
@@ -153,6 +165,18 @@
       currencyEnabled: Boolean(source.currencyEnabled),
       currencyValue: clampNumber(source.currencyValue, DEFAULT_STATE.currencyValue, 0, 999999999),
       currencyLastReadAt: clampNumber(source.currencyLastReadAt, DEFAULT_STATE.currencyLastReadAt, 0, 9999999999999),
+      starDiamondEnabled: Boolean(source.starDiamondEnabled),
+      starDiamondValue: clampNumber(source.starDiamondValue, DEFAULT_STATE.starDiamondValue, 0, 999999999),
+      starDiamondLastReadAt: clampNumber(source.starDiamondLastReadAt, DEFAULT_STATE.starDiamondLastReadAt, 0, 9999999999999),
+      vipExpEnabled: Boolean(source.vipExpEnabled),
+      vipExpValue: clampNumber(source.vipExpValue, DEFAULT_STATE.vipExpValue, 0, 999999999),
+      vipExpLastReadAt: clampNumber(source.vipExpLastReadAt, DEFAULT_STATE.vipExpLastReadAt, 0, 9999999999999),
+      stageAchEnabled: Boolean(source.stageAchEnabled),
+      stageAchValue: clampNumber(source.stageAchValue, DEFAULT_STATE.stageAchValue, 0, 999999999),
+      stageAchLastReadAt: clampNumber(source.stageAchLastReadAt, DEFAULT_STATE.stageAchLastReadAt, 0, 9999999999999),
+      eggHatchEnabled: Boolean(source.eggHatchEnabled),
+      eggHatchPetId: clampNumber(source.eggHatchPetId, DEFAULT_STATE.eggHatchPetId, 1, 999999),
+      eggHatchLastReadAt: clampNumber(source.eggHatchLastReadAt, DEFAULT_STATE.eggHatchLastReadAt, 0, 9999999999999),
       logs: Array.isArray(source.logs) ? source.logs.slice(-MAX_LOGS) : [],
     };
 
@@ -239,6 +263,11 @@
   function selectedPetLabel() {
     const pet = petById(state.petId);
     return pet ? `${pet.name} / ID ${pet.id}` : `ID ${state.petId}`;
+  }
+
+  function eggHatchPetLabel() {
+    const pet = petById(state.eggHatchPetId);
+    return pet ? `${pet.name} / ID ${pet.id}` : `ID ${state.eggHatchPetId}`;
   }
 
   function itemById(id) {
@@ -394,6 +423,26 @@
     saveState({ currencyLastReadAt: Date.now() });
   }
 
+  function markStarDiamondTouched(value) {
+    log("Flash star diamond mock read", `scxingzhuan=${value}`);
+    saveState({ starDiamondLastReadAt: Date.now() });
+  }
+
+  function markVipExpTouched(value) {
+    log("Flash VIP exp mock read", `vipcong=${value}`);
+    saveState({ vipExpLastReadAt: Date.now() });
+  }
+
+  function markStageAchTouched(value) {
+    log("Flash stage achievement mock read", `awardfixach=${value}`);
+    saveState({ stageAchLastReadAt: Date.now() });
+  }
+
+  function markEggHatchTouched(value) {
+    log("Flash egg hatch mock read", `eggChangPet=${value}`);
+    saveState({ eggHatchLastReadAt: Date.now() });
+  }
+
   function recordBagSnapshot(payload) {
     const encoded = clampNumber(payload, -1, -1, 999999999);
     if (encoded < BAG_SNAPSHOT_BASE) {
@@ -458,6 +507,22 @@
       return window.codexCurrencyMockValue();
     }
 
+    if (kind === "scxingzhuan" || kind === "starDiamond" || kind === "xingzhuan") {
+      return window.codexStarDiamondMockValue();
+    }
+
+    if (kind === "vipcong" || kind === "vipExp" || kind === "vipExperience") {
+      return window.codexVipExpMockValue();
+    }
+
+    if (kind === "awardfixach" || kind === "stageAch" || kind === "levelAch") {
+      return window.codexStageAchMockValue();
+    }
+
+    if (kind === "eggChangPet" || kind === "eggPet" || kind === "eggHatch" || kind === "hatchPet") {
+      return window.codexEggHatchMockValue();
+    }
+
     if (kind === "curLWJieDuan" || kind === "petStage") {
       return String(normalizeState(state).petStage);
     }
@@ -520,6 +585,42 @@
     }
     markCurrencyTouched(current.currencyValue);
     return String(current.currencyValue);
+  };
+
+  window.codexStarDiamondMockValue = function () {
+    const current = normalizeState(state);
+    if (!current.starDiamondEnabled) {
+      return "-1";
+    }
+    markStarDiamondTouched(current.starDiamondValue);
+    return String(current.starDiamondValue);
+  };
+
+  window.codexVipExpMockValue = function () {
+    const current = normalizeState(state);
+    if (!current.vipExpEnabled) {
+      return "-1";
+    }
+    markVipExpTouched(current.vipExpValue);
+    return String(current.vipExpValue);
+  };
+
+  window.codexStageAchMockValue = function () {
+    const current = normalizeState(state);
+    if (!current.stageAchEnabled) {
+      return "-1";
+    }
+    markStageAchTouched(current.stageAchValue);
+    return String(current.stageAchValue);
+  };
+
+  window.codexEggHatchMockValue = function () {
+    const current = normalizeState(state);
+    if (!current.eggHatchEnabled) {
+      return "-1";
+    }
+    markEggHatchTouched(current.eggHatchPetId);
+    return String(current.eggHatchPetId);
   };
 
   window.codexPetSnapshot = function () {
@@ -806,9 +907,11 @@
       </header>
       <div class="panelBody">
         <nav class="tabs">
+          <button type="button" class="tab" data-tab="level">关卡/孵化</button>
           <button type="button" class="tab" data-tab="pet">宠物</button>
           ${BAG_UI_ENABLED ? `<button type="button" class="tab" data-tab="bag">背包</button>` : ""}
           <button type="button" class="tab" data-tab="currency">晶币</button>
+          <button type="button" class="tab" data-tab="vip">星钻/VIP</button>
           <button type="button" class="tab" data-tab="params">参数</button>
           <button type="button" class="tab" data-tab="logs">日志</button>
         </nav>
@@ -888,6 +991,46 @@
       log("晶币 mock 已关闭");
       return;
     }
+    if (action === "star-diamond-enable") {
+      saveState({ starDiamondEnabled: true });
+      log("星钻 mock 已开启", `scxingzhuan=${state.starDiamondValue}`);
+      return;
+    }
+    if (action === "star-diamond-disable") {
+      saveState({ starDiamondEnabled: false });
+      log("星钻 mock 已关闭");
+      return;
+    }
+    if (action === "vip-exp-enable") {
+      saveState({ vipExpEnabled: true });
+      log("VIP 经验 mock 已开启", `vipcong=${state.vipExpValue}`);
+      return;
+    }
+    if (action === "vip-exp-disable") {
+      saveState({ vipExpEnabled: false });
+      log("VIP 经验 mock 已关闭");
+      return;
+    }
+    if (action === "stage-ach-enable") {
+      saveState({ stageAchEnabled: true });
+      log("关卡成就点 mock 已开启", `awardfixach=${state.stageAchValue}`);
+      return;
+    }
+    if (action === "stage-ach-disable") {
+      saveState({ stageAchEnabled: false });
+      log("关卡成就点 mock 已关闭");
+      return;
+    }
+    if (action === "egg-hatch-enable") {
+      saveState({ eggHatchEnabled: true });
+      log("宠物蛋孵化 mock 已开启", eggHatchPetLabel());
+      return;
+    }
+    if (action === "egg-hatch-disable") {
+      saveState({ eggHatchEnabled: false });
+      log("宠物蛋孵化 mock 已关闭");
+      return;
+    }
     if (action === "select-item") {
       saveState({ bagItemId: target.dataset.itemId });
       log("选择道具", selectedBagItemLabel());
@@ -923,6 +1066,11 @@
       log("选择宠物", selectedPetLabel());
       return;
     }
+    if (action === "select-egg-pet") {
+      saveState({ eggHatchPetId: target.dataset.petId, eggHatchEnabled: true });
+      log("选择孵化结果", eggHatchPetLabel());
+      return;
+    }
     if (action === "clear-logs") {
       saveState({ logs: [] });
       return;
@@ -938,6 +1086,10 @@
     const field = target.dataset.field;
     if (field === "petSearch") {
       renderPetList(target.value);
+      return;
+    }
+    if (field === "eggPetSearch") {
+      renderEggPetList(target.value);
       return;
     }
     if (field === "itemSearch") {
@@ -962,6 +1114,14 @@
     if (field === "bagFilterType") next.bagFilterType = target.value;
     if (field === "currencyEnabled") next.currencyEnabled = target.checked;
     if (field === "currencyValue") next.currencyValue = target.value;
+    if (field === "starDiamondEnabled") next.starDiamondEnabled = target.checked;
+    if (field === "starDiamondValue") next.starDiamondValue = target.value;
+    if (field === "vipExpEnabled") next.vipExpEnabled = target.checked;
+    if (field === "vipExpValue") next.vipExpValue = target.value;
+    if (field === "stageAchEnabled") next.stageAchEnabled = target.checked;
+    if (field === "stageAchValue") next.stageAchValue = target.value;
+    if (field === "eggHatchEnabled") next.eggHatchEnabled = target.checked;
+    if (field === "eggHatchPetId") next.eggHatchPetId = target.value;
     for (const prefix of ["lwSkill1", "useSkill1", "useSkill2", "useSkill3", "useSkill4"]) {
       if (field === `${prefix}Enabled`) next[`${prefix}Enabled`] = target.checked;
       if (field === `${prefix}Id`) next[`${prefix}Id`] = target.value;
@@ -1002,6 +1162,11 @@
       renderItemList("");
     } else if (state.activeTab === "currency") {
       content.innerHTML = renderCurrencyTab();
+    } else if (state.activeTab === "vip") {
+      content.innerHTML = renderVipTab();
+    } else if (state.activeTab === "level") {
+      content.innerHTML = renderLevelTab();
+      renderEggPetList("");
     } else if (state.activeTab === "params") {
       content.innerHTML = renderParamsTab();
     } else {
@@ -1017,6 +1182,10 @@
       const petReadFresh = state.petLastReadAt && Date.now() - state.petLastReadAt < 30000;
       const bagReadFresh = state.bagLastReadAt && Date.now() - state.bagLastReadAt < 30000;
       const currencyReadFresh = state.currencyLastReadAt && Date.now() - state.currencyLastReadAt < 30000;
+      const starDiamondReadFresh = state.starDiamondLastReadAt && Date.now() - state.starDiamondLastReadAt < 30000;
+      const vipExpReadFresh = state.vipExpLastReadAt && Date.now() - state.vipExpLastReadAt < 30000;
+      const stageAchReadFresh = state.stageAchLastReadAt && Date.now() - state.stageAchLastReadAt < 30000;
+      const eggHatchReadFresh = state.eggHatchLastReadAt && Date.now() - state.eggHatchLastReadAt < 30000;
       if (petReadFresh) {
         status.textContent = "宠物已读取";
         status.dataset.active = "1";
@@ -1026,6 +1195,18 @@
       } else if (currencyReadFresh) {
         status.textContent = "晶币已读取";
         status.dataset.active = "1";
+      } else if (starDiamondReadFresh) {
+        status.textContent = "星钻已读取";
+        status.dataset.active = "1";
+      } else if (vipExpReadFresh) {
+        status.textContent = "VIP 已读取";
+        status.dataset.active = "1";
+      } else if (stageAchReadFresh) {
+        status.textContent = "成就点已读取";
+        status.dataset.active = "1";
+      } else if (eggHatchReadFresh) {
+        status.textContent = "孵化已读取";
+        status.dataset.active = "1";
       } else if (state.petEnabled) {
         status.textContent = "宠物待触发";
         status.dataset.active = "2";
@@ -1034,6 +1215,18 @@
         status.dataset.active = "2";
       } else if (state.currencyEnabled) {
         status.textContent = "晶币待触发";
+        status.dataset.active = "2";
+      } else if (state.starDiamondEnabled) {
+        status.textContent = "星钻待触发";
+        status.dataset.active = "2";
+      } else if (state.vipExpEnabled) {
+        status.textContent = "VIP 待触发";
+        status.dataset.active = "2";
+      } else if (state.stageAchEnabled) {
+        status.textContent = "成就点待触发";
+        status.dataset.active = "2";
+      } else if (state.eggHatchEnabled) {
+        status.textContent = "孵化待触发";
         status.dataset.active = "2";
       } else {
         status.textContent = "关闭";
@@ -1162,6 +1355,88 @@
         <button type="button" data-action="currency-disable">关闭晶币</button>
       </div>
     `;
+  }
+
+  function renderVipTab() {
+    return `
+      <p class="sectionTitle">星钻 Mock</p>
+      <label><span>启用</span><input data-field="starDiamondEnabled" type="checkbox" ${state.starDiamondEnabled ? "checked" : ""}></label>
+      <label><span>星钻值</span><input data-field="starDiamondValue" type="number" min="0" max="999999999" value="${state.starDiamondValue}"></label>
+      <label><span>最近读取</span><output>${escapeHtml(lastReadText(state.starDiamondLastReadAt))}</output></label>
+      <p class="hint">开启后，Flash 读取 scxingzhuan / dgMoney 类本地余额时返回这里的数值；关闭后返回 -1，让游戏继续使用原本数据。</p>
+      <div class="actions">
+        <button type="button" class="primary" data-action="star-diamond-enable">开启星钻</button>
+        <button type="button" data-action="star-diamond-disable">关闭星钻</button>
+      </div>
+
+      <p class="sectionTitle">VIP 经验 Mock</p>
+      <label><span>启用</span><input data-field="vipExpEnabled" type="checkbox" ${state.vipExpEnabled ? "checked" : ""}></label>
+      <label><span>VIP 经验值</span><input data-field="vipExpValue" type="number" min="0" max="999999999" value="${state.vipExpValue}"></label>
+      <label><span>最近读取</span><output>${escapeHtml(lastReadText(state.vipExpLastReadAt))}</output></label>
+      <p class="hint">开启后，Flash 读取 vipcong / vipChongGod 时返回这里的数值；关闭后返回 -1，让游戏继续使用原本 VIP 数据。</p>
+      <div class="actions">
+        <button type="button" class="primary" data-action="vip-exp-enable">开启 VIP 经验</button>
+        <button type="button" data-action="vip-exp-disable">关闭 VIP 经验</button>
+      </div>
+    `;
+  }
+
+  function renderLevelTab() {
+    const hatchPet = petById(state.eggHatchPetId);
+    const hatchAsset = hatchPet?.asset ? `资源 ${escapeHtml(hatchPet.asset)}` : "资源未知";
+    return `
+      <p class="sectionTitle">关卡成就点 Mock</p>
+      <label><span>启用</span><input data-field="stageAchEnabled" type="checkbox" ${state.stageAchEnabled ? "checked" : ""}></label>
+      <label><span>每次通关增加</span><input data-field="stageAchValue" type="number" min="0" max="999999999" value="${state.stageAchValue}"></label>
+      <label><span>最近读取</span><output>${escapeHtml(lastReadText(state.stageAchLastReadAt))}</output></label>
+      <p class="hint">开启后，Flash 读取 CLevel.awardfixach 时返回这里的数值；关闭后返回 -1，继续使用关卡配置里的原始奖励。</p>
+      <div class="actions">
+        <button type="button" class="primary" data-action="stage-ach-enable">开启成就点</button>
+        <button type="button" data-action="stage-ach-disable">关闭成就点</button>
+      </div>
+
+      <p class="sectionTitle">宠物蛋孵化 Mock</p>
+      <label><span>启用</span><input data-field="eggHatchEnabled" type="checkbox" ${state.eggHatchEnabled ? "checked" : ""}></label>
+      <label><span>孵化结果</span><output>${escapeHtml(eggHatchPetLabel())}</output></label>
+      <label><span>最近读取</span><output>${escapeHtml(lastReadText(state.eggHatchLastReadAt))}</output></label>
+      <label class="wide"><span>宠物 ID</span><input data-field="eggHatchPetId" type="number" min="1" max="999999" value="${state.eggHatchPetId}"></label>
+      <label class="wide"><span>搜索宠物</span><input data-field="eggPetSearch" type="search" placeholder="输入名称或 ID"></label>
+      <div class="petList" data-role="eggPetList"></div>
+      <p class="hint">开启后，点击游戏里的孵化会把蛋转成这里指定的宠物 ID；关闭后使用蛋原本的 pid。${hatchAsset}。</p>
+      <div class="actions">
+        <button type="button" class="primary" data-action="egg-hatch-enable">开启孵化</button>
+        <button type="button" data-action="egg-hatch-disable">关闭孵化</button>
+      </div>
+    `;
+  }
+
+  function renderEggPetList(filter) {
+    const root = document.getElementById("codex-runtime-mock-panel");
+    const list = root?.querySelector("[data-role=eggPetList]");
+    if (!list) {
+      return;
+    }
+
+    const query = String(filter || "").trim().toLowerCase();
+    const filtered = petList
+      .filter((pet) => {
+        if (!query) return true;
+        return String(pet.id).includes(query) ||
+          String(pet.name || "").toLowerCase().includes(query) ||
+          String(pet.asset || "").toLowerCase().includes(query);
+      })
+      .slice(0, 80);
+
+    if (filtered.length === 0) {
+      list.innerHTML = `<div class="logLine muted">没有匹配的宠物，可以直接填写 ID。</div>`;
+      return;
+    }
+
+    list.innerHTML = filtered.map((pet) => `
+      <button type="button" data-action="select-egg-pet" data-pet-id="${pet.id}" data-active="${pet.id === state.eggHatchPetId ? "1" : "0"}">
+        ${escapeHtml(pet.name)} <span class="muted">ID ${pet.id}${pet.species ? ` / ${escapeHtml(pet.species)}` : ""}</span>
+      </button>
+    `).join("");
   }
 
   function renderItemList(filter) {

@@ -23,6 +23,8 @@ const callbackFunctionName = "dataIndexYouData";
 const enablePetMockPatch = process.env.CODEX_DISABLE_PET_MOCK_PATCH !== "1";
 const enableSaveGuardPatch = process.env.CODEX_DISABLE_SAVE_GUARD_PATCH !== "1";
 const enableCurrencyMockPatch = process.env.CODEX_DISABLE_CURRENCY_MOCK_PATCH !== "1";
+const enableStageAchMockPatch = process.env.CODEX_DISABLE_STAGE_ACH_MOCK_PATCH !== "1";
+const enableEggHatchMockPatch = process.env.CODEX_DISABLE_EGG_HATCH_MOCK_PATCH !== "1";
 const petMockPatchMode = process.env.CODEX_PET_MOCK_PATCH_MODE || "fixed-slot";
 const enableBagGiftPatch = process.env.CODEX_ENABLE_BAG_GIFT_MOCK === "1" || process.env.CODEX_ENABLE_BAG_MOCK === "1";
 const enableBagSaveAfterCountPatch = process.env.CODEX_ENABLE_BAG_SAVE_AFTER_COUNT_MOCK === "1";
@@ -39,6 +41,10 @@ const bagSnapshotPayloadStride = 1000;
 const bagItemIdCallbackKind = "goodsId";
 const bagItemCountCallbackKind = "goodsNum";
 const currencyCallbackKind = "goldCurr";
+const starDiamondCallbackKind = "scxingzhuan";
+const vipExpCallbackKind = "vipcong";
+const stageAchCallbackKind = "awardfixach";
+const eggHatchCallbackKind = "eggChangPet";
 const petSlotCallbackKind = "slot";
 const petStageCallbackKind = "curLWJieDuan";
 const petSkillBidCallbackKind = "bid";
@@ -60,6 +66,18 @@ const bagFactoryBcLbMethod = "hotpointgame.models.bag::BagFactory::static::::bcL
 const bagFactoryOnlyBagOneMethod = "hotpointgame.models.bag::BagFactory::static::::onlyBagOne";
 const playerBagPanelInitPanelMethod = "hotpointgame.views.playerPanel::PlayerBagPanel::::initPanel";
 const bagDisplayInitGoodsDisplayMethod = "hotpointgame.views.playerPanel::BagDisplay::::initGoodsDisplay";
+const stageAchGetterMethods = [
+  "hotpointgame.glevel::CLevel::::awardfixach",
+];
+const eggChangPetMethod = "hotpointgame.pet::PetManager::::eggChangPet";
+const starDiamondGetterMethods = [
+  "hotpointgame.Control::FlowInterface::static::::getDianJuanByRole",
+  "hotpointgame.gview::GameShangChengC::::dgMoney",
+];
+const vipExpGetterMethods = [
+  "hotpointgame.gameobj::ApiInterface::::vipChongGod",
+  "hotpointgame.Control::VipDataManager::::vipcong",
+];
 const currencyGetterMethods = [
   "hotpointgame.Control::FlowInterface::static::::getGodByRole",
   "hotpointgame.grole::CPlayer::::getGodByRole",
@@ -1085,27 +1103,27 @@ function buildBagReadInsertCode(abc, saveProcessBody, bagReadBody, bagSjChFunBod
   });
 }
 
-function buildCurrencyGetterCode(abc, saveProcessBody, targetBody) {
+function buildRuntimeValueGetterCode(abc, saveProcessBody, targetBody, callbackKind, fallbackLabel) {
   const externalInterface = operandFor(abc, saveProcessBody, "getlex", "::ExternalInterface");
   const externalCall = operandFor(abc, saveProcessBody, "callproperty", "::call");
   const callbackString = stringIndexFor(abc, callbackFunctionName);
-  const currencyString = stringIndexFor(abc, currencyCallbackKind);
+  const kindString = stringIndexFor(abc, callbackKind);
   const originalCode = Buffer.from(targetBody.code);
 
   const code = assemble([
     Buffer.from([0xd0, 0x30]), // getlocal0, pushscope
     instruction(0x60, externalInterface), // getlex ExternalInterface
     instruction(0x2c, callbackString), // pushstring callback
-    instruction(0x2c, currencyString), // pushstring goldCurr
+    instruction(0x2c, kindString), // pushstring callback kind
     instruction(0x46, externalCall, 2), // callproperty call, 2
     Buffer.from([0x73]), // convert_i
     setLocal(1),
     getLocal(1),
     pushIntLiteral(0),
-    branch(0x15, "runOriginalCurrencyGetter"), // iflt
+    branch(0x15, fallbackLabel), // iflt
     getLocal(1),
     Buffer.from([0x48]), // returnvalue
-    label("runOriginalCurrencyGetter"),
+    label(fallbackLabel),
     originalCode.subarray(2),
   ]);
 
@@ -1115,9 +1133,107 @@ function buildCurrencyGetterCode(abc, saveProcessBody, targetBody) {
       externalInterface,
       externalCall,
       callbackString,
-      currencyString,
+      kindString,
     },
   };
+}
+
+function buildEggChangPetCode(abc, saveProcessBody, eggChangPetBody) {
+  const eggArr = operandFor(abc, eggChangPetBody, "getproperty", "::eggArr");
+  const petArr = operandFor(abc, eggChangPetBody, "getproperty", "::petArr");
+  const wildcard = operandFor(abc, eggChangPetBody, "setproperty", "::*");
+  const eggR = operandFor(abc, eggChangPetBody, "coerce", "::EggR");
+  const petR = operandFor(abc, eggChangPetBody, "coerce", "::PetR");
+  const petRConstruct = operandFor(abc, eggChangPetBody, "findpropstrict", "::PetR");
+  const initBid = operandFor(abc, eggChangPetBody, "callpropvoid", "::initBid");
+  const pid = operandFor(abc, eggChangPetBody, "getproperty", "::pid");
+  const externalInterface = operandFor(abc, saveProcessBody, "getlex", "::ExternalInterface");
+  const externalCall = operandFor(abc, saveProcessBody, "callproperty", "::call");
+  const callbackString = stringIndexFor(abc, callbackFunctionName);
+  const kindString = stringIndexFor(abc, eggHatchCallbackKind);
+
+  const code = assemble([
+    Buffer.from([0xd0, 0x30]), // getlocal0, pushscope
+    Buffer.from([0x20]), // pushnull
+    instruction(0x80, eggR), // coerce EggR
+    Buffer.from([0xd6]), // setlocal2
+    Buffer.from([0x20]), // pushnull
+    instruction(0x80, petR), // coerce PetR
+    Buffer.from([0xd7]), // setlocal3
+    Buffer.from([0xd0]), // getlocal0
+    instruction(0x66, eggArr), // getproperty eggArr
+    Buffer.from([0xd1]), // getlocal1
+    instruction(0x66, wildcard), // getproperty *
+    Buffer.from([0x20]), // pushnull
+    branch(0x13, "done"), // ifeq
+    Buffer.from([0xd0]), // getlocal0
+    instruction(0x66, eggArr), // getproperty eggArr
+    Buffer.from([0xd1]), // getlocal1
+    instruction(0x66, wildcard), // getproperty *
+    instruction(0x80, eggR), // coerce EggR
+    Buffer.from([0xd6]), // setlocal2
+    Buffer.from([0xd0]), // getlocal0
+    instruction(0x66, eggArr), // getproperty eggArr
+    Buffer.from([0xd1]), // getlocal1
+    Buffer.from([0x20]), // pushnull
+    instruction(0x61, wildcard), // setproperty *
+    instruction(0x5d, petRConstruct), // findpropstrict PetR
+    instruction(0x4a, petRConstruct, 0), // constructprop PetR, 0
+    instruction(0x80, petR), // coerce PetR
+    Buffer.from([0xd7]), // setlocal3
+    instruction(0x60, externalInterface), // getlex ExternalInterface
+    instruction(0x2c, callbackString), // pushstring callback
+    instruction(0x2c, kindString), // pushstring callback kind
+    instruction(0x46, externalCall, 2), // callproperty call, 2
+    Buffer.from([0x73]), // convert_i
+    setLocal(4),
+    Buffer.from([0xd3]), // getlocal3
+    getLocal(4),
+    pushIntLiteral(0),
+    branch(0x15, "useEggPid"), // iflt
+    getLocal(4),
+    branch(0x10, "callInitBid"), // jump
+    label("useEggPid"),
+    Buffer.from([0xd2]), // getlocal2
+    instruction(0x66, pid), // getproperty pid
+    label("callInitBid"),
+    instruction(0x4f, initBid, 1), // callpropvoid initBid, 1
+    Buffer.from([0xd0]), // getlocal0
+    instruction(0x66, petArr), // getproperty petArr
+    Buffer.from([0xd1]), // getlocal1
+    Buffer.from([0xd3]), // getlocal3
+    instruction(0x61, wildcard), // setproperty *
+    label("done"),
+    Buffer.from([0x47]), // returnvoid
+  ]);
+
+  return {
+    code,
+    operands: {
+      eggArr,
+      petArr,
+      wildcard,
+      eggR,
+      petR,
+      petRConstruct,
+      initBid,
+      pid,
+      externalInterface,
+      externalCall,
+      callbackString,
+      kindString,
+    },
+  };
+}
+
+function buildCurrencyGetterCode(abc, saveProcessBody, targetBody) {
+  return buildRuntimeValueGetterCode(
+    abc,
+    saveProcessBody,
+    targetBody,
+    currencyCallbackKind,
+    "runOriginalCurrencyGetter"
+  );
 }
 
 function writeU30SameLength(buffer, offset, newValue, label) {
@@ -1151,28 +1267,68 @@ function patch() {
     const petRReadDataBody = methodBodyFor(abc, petRReadDataMethod);
     const petRPetlWSkillByGodBody = methodBodyFor(abc, petRPetlWSkillByGodMethod);
     const currencySaveProcessBody = enableCurrencyMockPatch ? methodBodyFor(abc, saveProcessMethod) : null;
+    const runtimeValueSaveProcessBody = (enableCurrencyMockPatch || enableStageAchMockPatch)
+      ? methodBodyFor(abc, saveProcessMethod)
+      : null;
+    const eggChangPetBody = enableEggHatchMockPatch ? methodBodyFor(abc, eggChangPetMethod) : null;
     const bagSjChFunBody = (enableBagGiftPatch || enableBagSaveAfterCountPatch || enablePlayerBagPanelPatch || enableBagReadPatch || enableBagGameStartPatch)
       ? methodBodyFor(abc, bagFactorySjChFunMethod)
       : null;
     const bagBcLbBody = enableBagGiftPatch ? methodBodyFor(abc, bagFactoryBcLbMethod) : null;
 
-    if (enableCurrencyMockPatch && currencySaveProcessBody) {
-      for (const methodName of currencyGetterMethods) {
+    if ((enableCurrencyMockPatch || enableStageAchMockPatch) && runtimeValueSaveProcessBody) {
+      const runtimeValueGetterGroups = [
+        ...(enableCurrencyMockPatch ? [{
+          methods: currencyGetterMethods,
+          kind: currencyCallbackKind,
+          flag: "currencyMock",
+          fallbackLabel: "runOriginalCurrencyGetter",
+        },
+        {
+          methods: starDiamondGetterMethods,
+          kind: starDiamondCallbackKind,
+          flag: "starDiamondMock",
+          fallbackLabel: "runOriginalStarDiamondGetter",
+        },
+        {
+          methods: vipExpGetterMethods,
+          kind: vipExpCallbackKind,
+          flag: "vipExpMock",
+          fallbackLabel: "runOriginalVipExpGetter",
+        }] : []),
+        ...(enableStageAchMockPatch ? [{
+          methods: stageAchGetterMethods,
+          kind: stageAchCallbackKind,
+          flag: "stageAchMock",
+          fallbackLabel: "runOriginalStageAchGetter",
+        }] : []),
+      ];
+
+      for (const group of runtimeValueGetterGroups) {
+        for (const methodName of group.methods) {
         const currencyBody = methodBodyFor(abc, methodName);
         if (!currencyBody) {
           continue;
         }
-        if (bodyHasCallback(abc, currencyBody, currencyCallbackKind)) {
+        if (bodyHasCallback(abc, currencyBody, group.kind)) {
           patched.push({
             method: methodName,
-            currencyMock: true,
+            [group.flag]: true,
             alreadyPatched: true,
           });
           continue;
         }
 
         const before = disassembleBody(abc, currencyBody);
-        const built = buildCurrencyGetterCode(abc, currencySaveProcessBody, currencyBody);
+        const built = group.kind === currencyCallbackKind
+          ? buildCurrencyGetterCode(abc, currencySaveProcessBody, currencyBody)
+          : buildRuntimeValueGetterCode(
+            abc,
+            runtimeValueSaveProcessBody,
+            currencyBody,
+            group.kind,
+            group.fallbackLabel
+          );
         const replaced = replaceMethodCode(
           abcBuffer,
           headers,
@@ -1186,8 +1342,44 @@ function patch() {
 
         patched.push({
           method: methodName,
-          currencyMock: true,
+          [group.flag]: true,
           codeLength: { oldValue: currencyBody.code.length, newValue: built.code.length },
+          patches: replaced.patches,
+          operands: built.operands,
+          before,
+        });
+
+        abc = parseAbc(abcBuffer);
+        headers = methodBodyHeaders(abcBuffer);
+      }
+      }
+    }
+
+    if (enableEggHatchMockPatch && saveProcessBody && eggChangPetBody) {
+      if (bodyHasCallback(abc, eggChangPetBody, eggHatchCallbackKind)) {
+        patched.push({
+          method: eggChangPetMethod,
+          eggHatchMock: true,
+          alreadyPatched: true,
+        });
+      } else {
+        const before = disassembleBody(abc, eggChangPetBody);
+        const built = buildEggChangPetCode(abc, saveProcessBody, eggChangPetBody);
+        const replaced = replaceMethodCode(
+          abcBuffer,
+          headers,
+          eggChangPetBody,
+          built.code,
+          eggChangPetMethod,
+          { maxStack: Math.max(eggChangPetBody.maxStack, 5), localCount: Math.max(eggChangPetBody.localCount, 5) }
+        );
+        abcBuffer = replaced.abcBuffer;
+        ensureBackup();
+
+        patched.push({
+          method: eggChangPetMethod,
+          eggHatchMock: true,
+          codeLength: { oldValue: eggChangPetBody.code.length, newValue: built.code.length },
           patches: replaced.patches,
           operands: built.operands,
           before,
@@ -1501,6 +1693,10 @@ function patch() {
 
   const required = new Set([
     ...(enableCurrencyMockPatch ? currencyGetterMethods : []),
+    ...(enableCurrencyMockPatch ? starDiamondGetterMethods : []),
+    ...(enableCurrencyMockPatch ? vipExpGetterMethods : []),
+    ...(enableStageAchMockPatch ? stageAchGetterMethods : []),
+    ...(enableEggHatchMockPatch ? [eggChangPetMethod] : []),
     ...(enablePetMockPatch || enableBagSaveAfterCountPatch ? [saveAfterCountMethod] : []),
     ...(enableSaveGuardPatch ? [saveDataStartMethod] : []),
     ...(enableBagGiftPatch ? [bagFactoryBcLbMethod] : []),
@@ -1528,6 +1724,12 @@ function patch() {
     enablePetMockPatch,
     enableSaveGuardPatch,
     enableCurrencyMockPatch,
+    enableStageAchMockPatch,
+    enableEggHatchMockPatch,
+    stageAchGetterMethods,
+    eggChangPetMethod,
+    starDiamondGetterMethods,
+    vipExpGetterMethods,
     petMockPatchMode,
     enableBagGiftPatch,
     enableBagSaveAfterCountPatch,
