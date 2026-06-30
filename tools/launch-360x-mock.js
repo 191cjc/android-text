@@ -4,6 +4,7 @@ const path = require("path");
 const zlib = require("zlib");
 const { execFileSync, spawn } = require("child_process");
 const net = require("net");
+const { sanitizeSaveData } = require("../src/cheat-check-mock");
 
 const projectRoot = path.resolve(__dirname, "..");
 const officialGameUrl = "https://www.4399.com/flash/115225_2.htm";
@@ -39,6 +40,8 @@ const highRechargeSaveFieldOverrides = {
   guiwq: "0",
   guist: "0",
 };
+const cheatCheckMockEnabled = process.env.LAUNCH_360X_CHEAT_CHECK_MOCK === "1";
+const headlessMode = process.env.LAUNCH_360X_HEADLESS === "1";
 
 function browserCandidates() {
   const env = process.env;
@@ -514,6 +517,20 @@ function dataFieldValue(record) {
   return null;
 }
 
+function sanitizeCheatCheckDataForMock(data, context) {
+  if (!cheatCheckMockEnabled) {
+    return { data, changed: false, reason: "disabled" };
+  }
+
+  const result = sanitizeSaveData(data);
+  if (result.changed) {
+    console.log(`[cheat-check-mock] ${context}: cleared ${result.checkBlocks} check block(s).`);
+  } else {
+    console.log(`[cheat-check-mock] ${context}: unchanged (${result.reason}).`);
+  }
+  return result;
+}
+
 function parseJsonLike(text) {
   const trimmed = String(text || "").trim().replace(/^\uFEFF/, "");
   if (!trimmed || trimmed === "0") {
@@ -976,11 +993,12 @@ function mockSlotRecord(index) {
   if (!record || typeof record.data !== "string" || record.data.length === 0) {
     return null;
   }
+  const sanitized = sanitizeCheatCheckDataForMock(record.data, `load slot ${index}`);
   return {
     index,
     title: typeof record.title === "string" && record.title ? record.title : `Mock Save ${index + 1}`,
     datetime: typeof record.datetime === "string" && record.datetime ? record.datetime : nowText(),
-    data: record.data,
+    data: sanitized.data,
     status: record.status == null ? "0" : String(record.status),
   };
 }
@@ -988,10 +1006,12 @@ function mockSlotRecord(index) {
 function writeMockSlotFromRequest(url, postData) {
   const params = mergedRequestParams(url, postData);
   const index = pickSaveIndexFromParams(params, 0);
-  const data = dataFieldValue(Object.fromEntries(params.entries()));
-  if (typeof data !== "string" || data.length === 0) {
+  const rawData = dataFieldValue(Object.fromEntries(params.entries()));
+  if (typeof rawData !== "string" || rawData.length === 0) {
     return null;
   }
+  const sanitized = sanitizeCheatCheckDataForMock(rawData, `save slot ${index}`);
+  const data = sanitized.data;
 
   const store = readMockSaveStore();
   store.slots = store.slots || {};
@@ -1755,6 +1775,12 @@ async function main() {
     "about:blank",
   ];
 
+  if (headlessMode) {
+    args.unshift("--headless=new");
+    args.unshift("--disable-gpu");
+    args.unshift("--window-size=1280,800");
+  }
+
   if (useIsolatedProfile) {
     fs.mkdirSync(isolatedUserDataDir, { recursive: true });
     args.unshift(`--user-data-dir=${isolatedUserDataDir}`);
@@ -1764,7 +1790,7 @@ async function main() {
   const child = spawn(browserPath, args, {
     detached: false,
     stdio: "ignore",
-    windowsHide: false,
+    windowsHide: true,
   });
 
   child.on("exit", (code, signal) => {
@@ -1885,6 +1911,7 @@ async function main() {
 
   console.log(`Opened 360X mock session: ${targetUrl}`);
   console.log(`CDP: http://127.0.0.1:${debugPort}/json/list`);
+  console.log(`Browser: ${headlessMode ? "headless" : "visible"}`);
   if (officialSaveTest) {
     console.log("Mode: official save test; SWF replacement and mock panel injection are disabled.");
     console.log("Save API logging: enabled for save.api.4399.com requests.");

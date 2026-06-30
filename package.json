@@ -16,6 +16,7 @@
     "start:360:mock:patch-save-fields:isolated": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$env:LAUNCH_360X_PATCH_SAVE_FIELDS='1'; $env:LAUNCH_360X_PROFILE='isolated'; node tools/launch-360x-mock.js\"",
     "start:360:mock:high-recharge": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$env:LAUNCH_360X_PATCH_SAVE_FIELDS='1'; $env:LAUNCH_360X_SAVE_FIELD_PRESET='high-recharge'; node tools/launch-360x-mock.js\"",
     "start:360:mock:high-recharge:isolated": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$env:LAUNCH_360X_PATCH_SAVE_FIELDS='1'; $env:LAUNCH_360X_SAVE_FIELD_PRESET='high-recharge'; $env:LAUNCH_360X_PROFILE='isolated'; node tools/launch-360x-mock.js\"",
+    "start:360:mock:cheat": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$env:LAUNCH_360X_PROFILE='isolated'; $env:LAUNCH_360X_MOCK_SAVE_MODE='local-session'; $env:LAUNCH_360X_CHEAT_CHECK_MOCK='1'; $env:LAUNCH_360X_HEADLESS='0'; node tools/launch-360x-mock.js\"",
     "start:360:mock:outer-backup": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$env:LAUNCH_360X_SWF_PATH='modified/xfbbv451.before-embed-gamefile-patch.swf'; node tools/launch-360x-mock.js\"",
     "start:360:mock:outer-original": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$env:LAUNCH_360X_SWF_PATH='original/xfbbv451.swf'; node tools/launch-360x-mock.js\"",
     "start:360:official-debug": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$env:LAUNCH_360X_OFFICIAL_SAVE_TEST='1'; node tools/launch-360x-mock.js\"",
