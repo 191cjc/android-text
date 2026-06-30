@@ -1,6 +1,7 @@
 const fs = require("fs");
 const http = require("http");
 const path = require("path");
+const zlib = require("zlib");
 const { execFileSync, spawn } = require("child_process");
 const net = require("net");
 
@@ -9,6 +10,35 @@ const officialGameUrl = "https://www.4399.com/flash/115225_2.htm";
 const defaultDebugPort = 9223;
 const isolatedUserDataDir = path.join(projectRoot, ".browser-data", "360x-mock");
 const mockSaveStorePath = path.join(projectRoot, "data", "runtime-mock-saves.json");
+const defaultSaveItemFilterIds = [
+  331334, 331338, 331109,
+  411099, 411100, 411101, 411102, 411103, 411104, 411105, 411106,
+  141417, 141418, 511032, 331161, 331239, 331105,
+];
+const defaultSaveFieldOverrides = {
+  eq: "0",
+  vip: "0",
+  dgn: "0",
+  sxd: "0",
+  sxm: "0",
+  sxv: "0",
+  un: "0",
+  guisp: "0",
+  guiwq: "0",
+  guist: "0",
+};
+const highRechargeSaveFieldOverrides = {
+  eq: "1",
+  vip: "8",
+  dgn: "500000",
+  sxd: "500000",
+  sxm: "500000",
+  sxv: "8",
+  un: "0",
+  guisp: "0",
+  guiwq: "0",
+  guist: "0",
+};
 
 function browserCandidates() {
   const env = process.env;
@@ -539,6 +569,391 @@ function saveRecordsFromParsed(value) {
 
 function saveRecordsFromResponse(text) {
   return saveRecordsFromParsed(parseJsonLike(text));
+}
+
+function saveItemFilterIds() {
+  const raw = process.env.LAUNCH_360X_SAVE_ITEM_FILTER_IDS;
+  if (raw == null || raw.trim() === "") {
+    return defaultSaveItemFilterIds;
+  }
+  return raw
+    .split(new RegExp("[,\\uFF0C\\s]+"))
+    .map((item) => Number.parseInt(item, 10))
+    .filter((item) => Number.isFinite(item) && item > 0);
+}
+
+function parseSaveFieldOverrides() {
+  const raw = process.env.LAUNCH_360X_SAVE_FIELD_OVERRIDES;
+  if (raw == null || raw.trim() === "") {
+    if (process.env.LAUNCH_360X_SAVE_FIELD_PRESET === "high-recharge") {
+      return { ...highRechargeSaveFieldOverrides };
+    }
+    return { ...defaultSaveFieldOverrides };
+  }
+
+  const overrides = {};
+  for (const part of raw.split(/[,\s]+/)) {
+    const trimmed = part.trim();
+    if (!trimmed) {
+      continue;
+    }
+    const separator = trimmed.indexOf("=");
+    if (separator <= 0) {
+      continue;
+    }
+    const key = trimmed.slice(0, separator).trim();
+    const value = trimmed.slice(separator + 1).trim();
+    if (/^[A-Za-z_][A-Za-z0-9_]*$/.test(key) && /^-?\d+(?:\.\d+)?$/.test(value)) {
+      overrides[key] = value;
+    }
+  }
+  return overrides;
+}
+
+function patchSaveXmlNumberFields(xml, overrides) {
+  if (typeof xml !== "string" || !overrides || Object.keys(overrides).length === 0) {
+    return { xml, changes: [] };
+  }
+
+  const changes = [];
+  let nextXml = xml;
+  for (const [name, nextValue] of Object.entries(overrides)) {
+    const escapedName = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const pattern = new RegExp(`(<s\\s+type="Number"\\s+name="${escapedName}">)([^<]*)(<\\/s>)`, "g");
+    nextXml = nextXml.replace(pattern, (match, open, currentValue, close) => {
+      const from = String(currentValue).trim();
+      const to = String(nextValue);
+      if (from === to) {
+        return match;
+      }
+      changes.push({ field: name, from, to });
+      return `${open}${to}${close}`;
+    });
+  }
+
+  return { xml: nextXml, changes };
+}
+
+function patchSaveDataNumberFields(data, overrides) {
+  if (typeof data !== "string" || data.length === 0) {
+    return { data, changes: [] };
+  }
+
+  let raw;
+  try {
+    raw = Buffer.from(data, "base64");
+  } catch {
+    return { data, changes: [] };
+  }
+
+  let xml;
+  try {
+    xml = zlib.inflateSync(raw).toString("utf8");
+  } catch {
+    return { data, changes: [] };
+  }
+
+  const patched = patchSaveXmlNumberFields(xml, overrides);
+  if (patched.changes.length === 0 || patched.xml === xml) {
+    return { data, changes: [] };
+  }
+
+  const nextData = zlib.deflateSync(Buffer.from(patched.xml, "utf8")).toString("base64");
+  return { data: nextData, changes: patched.changes };
+}
+
+function patchSaveRecordNumberFields(record, overrides, fallbackIndex = null) {
+  if (!record || typeof record !== "object") {
+    return { value: record, changes: [] };
+  }
+
+  const dataKey = saveDataKeys.find((key) => typeof record[key] === "string");
+  if (!dataKey) {
+    return { value: record, changes: [] };
+  }
+
+  const patched = patchSaveDataNumberFields(record[dataKey], overrides);
+  if (patched.changes.length === 0) {
+    return { value: record, changes: [] };
+  }
+
+  const index = pickSaveIndexFromRecord(record, fallbackIndex);
+  return {
+    value: {
+      ...record,
+      [dataKey]: patched.data,
+    },
+    changes: patched.changes.map((item) => ({ ...item, slot: index })),
+  };
+}
+
+function patchSaveRecordsNumberFields(value, overrides, fallbackIndex = null) {
+  if (!value) {
+    return { value, changes: [] };
+  }
+
+  if (Array.isArray(value)) {
+    const changes = [];
+    const next = value.map((item, index) => {
+      const patched = patchSaveRecordsNumberFields(item, overrides, index);
+      changes.push(...patched.changes);
+      return patched.value;
+    });
+    return { value: next, changes };
+  }
+
+  if (typeof value !== "object") {
+    return { value, changes: [] };
+  }
+
+  if (typeof dataFieldValue(value) === "string") {
+    return patchSaveRecordNumberFields(value, overrides, fallbackIndex);
+  }
+
+  const clone = { ...value };
+  const changes = [];
+  const nestedKeys = ["ret", "data", "list", "dataList", "saveList", "items", "rows"];
+  for (const key of nestedKeys) {
+    if (clone[key] && typeof clone[key] === "object") {
+      const patched = patchSaveRecordsNumberFields(clone[key], overrides, fallbackIndex);
+      clone[key] = patched.value;
+      changes.push(...patched.changes);
+    }
+  }
+
+  return { value: clone, changes };
+}
+
+function patchSaveResponseNumberFields(originalText, overrides) {
+  const parsed = parseJsonLike(originalText);
+  if (!parsed) {
+    return { text: originalText, changes: [] };
+  }
+
+  const patched = patchSaveRecordsNumberFields(parsed, overrides, null);
+  if (patched.changes.length === 0) {
+    return { text: originalText, changes: [] };
+  }
+
+  return {
+    text: JSON.stringify(patched.value),
+    changes: patched.changes,
+  };
+}
+
+function emptySaveBagSlot() {
+  return [
+    '<s type="Object" name="null">',
+    '<s type="String" name="gs">null</s>',
+    '<s type="Number" name="gn">0</s>',
+    '<s type="Number" name="key">0</s>',
+    '</s>',
+  ].join("");
+}
+
+function findXmlElementEnd(xml, start) {
+  const firstTag = xml.slice(start).match(/^<s\b[^>]*>/);
+  if (!firstTag) {
+    return -1;
+  }
+
+  let depth = 0;
+  const tagPattern = /<\/?s\b[^>]*>/g;
+  tagPattern.lastIndex = start;
+  let match;
+  while ((match = tagPattern.exec(xml))) {
+    const tag = match[0];
+    if (tag[1] === "/") {
+      depth -= 1;
+      if (depth === 0) {
+        return tagPattern.lastIndex;
+      }
+    } else if (!tag.endsWith("/>")) {
+      depth += 1;
+    }
+  }
+
+  return -1;
+}
+
+function filterSaveXmlBagItems(xml, blockedIds, options = {}) {
+  const clearAllBags = Boolean(options.clearAllBags);
+  if (!clearAllBags && (!blockedIds || blockedIds.size === 0)) {
+    return { xml, removed: [] };
+  }
+  if (typeof xml !== "string" || !xml.includes('name="bg"')) {
+    return { xml, removed: [] };
+  }
+
+  const removed = [];
+  const bagPattern = /<s type="Object" name="b(?:[1-9]|1[0-2])">/g;
+  let output = "";
+  let cursor = 0;
+  let bagMatch;
+
+  while ((bagMatch = bagPattern.exec(xml))) {
+    const bagStart = bagMatch.index;
+    const bagEnd = findXmlElementEnd(xml, bagStart);
+    if (bagEnd < 0) {
+      continue;
+    }
+
+    const beforeBag = xml.slice(cursor, bagStart);
+    let bagBlock = xml.slice(bagStart, bagEnd);
+    const bagName = bagMatch[0].match(/name="([^"]+)"/)?.[1] || "";
+    const slotPattern = /<s type="Object" name="null">/g;
+    let nextBagBlock = "";
+    let slotCursor = 0;
+    let slotMatch;
+
+    while ((slotMatch = slotPattern.exec(bagBlock))) {
+      const slotStart = slotMatch.index;
+      const slotEnd = findXmlElementEnd(bagBlock, slotStart);
+      if (slotEnd < 0) {
+        continue;
+      }
+
+      const slotBlock = bagBlock.slice(slotStart, slotEnd);
+      const idMatch = slotBlock.match(/<s type="Number" name="id">(\d+)<\/s>/);
+      const id = idMatch ? Number.parseInt(idMatch[1], 10) : null;
+
+      nextBagBlock += bagBlock.slice(slotCursor, slotStart);
+      if (id != null && (clearAllBags || blockedIds.has(id))) {
+        removed.push({ bag: bagName, id, reason: clearAllBags ? "clear-all" : "blocked-id" });
+        nextBagBlock += emptySaveBagSlot();
+      } else {
+        nextBagBlock += slotBlock;
+      }
+      slotCursor = slotEnd;
+      slotPattern.lastIndex = slotEnd;
+    }
+
+    if (slotCursor > 0) {
+      nextBagBlock += bagBlock.slice(slotCursor);
+      bagBlock = nextBagBlock;
+    }
+
+    output += beforeBag + bagBlock;
+    cursor = bagEnd;
+    bagPattern.lastIndex = bagEnd;
+  }
+
+  if (cursor === 0) {
+    return { xml, removed };
+  }
+
+  output += xml.slice(cursor);
+  return { xml: output, removed };
+}
+
+function filterSaveDataBagItems(data, blockedIds, options = {}) {
+  if (typeof data !== "string" || data.length === 0) {
+    return { data, removed: [] };
+  }
+  if (!options.clearAllBags && (!blockedIds || blockedIds.size === 0)) {
+    return { data, removed: [] };
+  }
+
+  let raw;
+  try {
+    raw = Buffer.from(data, "base64");
+  } catch {
+    return { data, removed: [] };
+  }
+
+  let xml;
+  try {
+    xml = zlib.inflateSync(raw).toString("utf8");
+  } catch {
+    return { data, removed: [] };
+  }
+
+  const filtered = filterSaveXmlBagItems(xml, blockedIds, options);
+  if (filtered.removed.length === 0 || filtered.xml === xml) {
+    return { data, removed: [] };
+  }
+
+  const nextData = zlib.deflateSync(Buffer.from(filtered.xml, "utf8")).toString("base64");
+  return { data: nextData, removed: filtered.removed };
+}
+
+function filterSaveRecordBagItems(record, blockedIds, fallbackIndex = null, options = {}) {
+  if (!record || typeof record !== "object") {
+    return { value: record, removed: [] };
+  }
+
+  const dataKey = saveDataKeys.find((key) => typeof record[key] === "string");
+  if (!dataKey) {
+    return { value: record, removed: [] };
+  }
+
+  const filtered = filterSaveDataBagItems(record[dataKey], blockedIds, options);
+  if (filtered.removed.length === 0) {
+    return { value: record, removed: [] };
+  }
+
+  const index = pickSaveIndexFromRecord(record, fallbackIndex);
+  return {
+    value: {
+      ...record,
+      [dataKey]: filtered.data,
+    },
+    removed: filtered.removed.map((item) => ({ ...item, slot: index })),
+  };
+}
+
+function filterSaveRecordsInParsed(value, blockedIds, fallbackIndex = null, options = {}) {
+  if (!value) {
+    return { value, removed: [] };
+  }
+
+  if (Array.isArray(value)) {
+    const removed = [];
+    const next = value.map((item, index) => {
+      const filtered = filterSaveRecordsInParsed(item, blockedIds, index, options);
+      removed.push(...filtered.removed);
+      return filtered.value;
+    });
+    return { value: next, removed };
+  }
+
+  if (typeof value !== "object") {
+    return { value, removed: [] };
+  }
+
+  if (typeof dataFieldValue(value) === "string") {
+    return filterSaveRecordBagItems(value, blockedIds, fallbackIndex, options);
+  }
+
+  const clone = { ...value };
+  const removed = [];
+  const nestedKeys = ["ret", "data", "list", "dataList", "saveList", "items", "rows"];
+  for (const key of nestedKeys) {
+    if (clone[key] && typeof clone[key] === "object") {
+      const filtered = filterSaveRecordsInParsed(clone[key], blockedIds, fallbackIndex, options);
+      clone[key] = filtered.value;
+      removed.push(...filtered.removed);
+    }
+  }
+
+  return { value: clone, removed };
+}
+
+function filterSaveResponseBagItems(originalText, blockedIds, options = {}) {
+  const parsed = parseJsonLike(originalText);
+  if (!parsed) {
+    return { text: originalText, removed: [] };
+  }
+
+  const filtered = filterSaveRecordsInParsed(parsed, blockedIds, null, options);
+  if (filtered.removed.length === 0) {
+    return { text: originalText, removed: [] };
+  }
+
+  return {
+    text: JSON.stringify(filtered.value),
+    removed: filtered.removed,
+  };
 }
 
 function readMockSaveStore() {
@@ -1102,7 +1517,139 @@ function enableOfficialSaveLogging(client) {
   });
 }
 
-function fetchPatternsForMockSession() {
+function isSaveItemFilterEnabled() {
+  const value = process.env.LAUNCH_360X_FILTER_SAVE_ITEMS;
+  if (value === "1" || /^true$/i.test(value || "")) {
+    return true;
+  }
+  if (value === "0" || /^false$/i.test(value || "")) {
+    return false;
+  }
+  return false;
+}
+
+function isSaveBagClearEnabled() {
+  const value = process.env.LAUNCH_360X_CLEAR_SAVE_BAGS;
+  if (value === "1" || /^true$/i.test(value || "")) {
+    return true;
+  }
+  if (value === "0" || /^false$/i.test(value || "")) {
+    return false;
+  }
+  return false;
+}
+
+function isSaveFieldPatchEnabled() {
+  const value = process.env.LAUNCH_360X_PATCH_SAVE_FIELDS;
+  if (value === "1" || /^true$/i.test(value || "")) {
+    return true;
+  }
+  if (value === "0" || /^false$/i.test(value || "")) {
+    return false;
+  }
+  return false;
+}
+
+function enableSaveReadResponsePatch(client, options = {}) {
+  const itemFilterEnabled = Boolean(options.itemFilterEnabled);
+  const fieldPatchEnabled = Boolean(options.fieldPatchEnabled);
+  const blockedIds = itemFilterEnabled ? new Set(saveItemFilterIds()) : new Set();
+  const clearAllBags = itemFilterEnabled && isSaveBagClearEnabled();
+  const fieldOverrides = fieldPatchEnabled ? parseSaveFieldOverrides() : {};
+  return {
+    itemFilterEnabled,
+    fieldPatchEnabled,
+    blockedIds: [...blockedIds],
+    clearAllBags,
+    fieldOverrides,
+    async handlePausedResponse(params) {
+      const request = params.request || {};
+      const requestUrl = request.url || "";
+      const postData = typeof request.postData === "string" ? request.postData : "";
+      const label = saveApiRequestLabel(requestUrl, postData);
+      const isResponseStage = typeof params.responseStatusCode === "number";
+
+      if (!isResponseStage || !isSaveApiUrl(requestUrl)) {
+        return false;
+      }
+
+      try {
+        const body = await client.send("Fetch.getResponseBody", { requestId: params.requestId });
+        const originalText = body.base64Encoded
+          ? Buffer.from(body.body, "base64").toString("utf8")
+          : body.body;
+
+        let nextText = originalText;
+        let removed = [];
+        let changes = [];
+
+        if (itemFilterEnabled) {
+          const filtered = filterSaveResponseBagItems(nextText, blockedIds, { clearAllBags });
+          nextText = filtered.text;
+          removed = filtered.removed;
+        }
+
+        if (fieldPatchEnabled) {
+          const patched = patchSaveResponseNumberFields(nextText, fieldOverrides);
+          nextText = patched.text;
+          changes = patched.changes;
+        }
+
+        if (removed.length > 0) {
+          const summary = removed
+            .map((item) => `slot ${item.slot ?? "?"} ${item.bag}:${item.id}`)
+            .join(", ");
+          console.log(`[save-filter] removed blocked bag items from ${label}: ${summary}`);
+        }
+
+        if (changes.length > 0) {
+          const summary = changes
+            .map((item) => `slot ${item.slot ?? "?"} ${item.field}:${item.from}->${item.to}`)
+            .join(", ");
+          console.log(`[save-fields] patched ${label} response fields: ${summary}`);
+        }
+
+        if (removed.length === 0 && changes.length === 0) {
+          const parts = [];
+          if (itemFilterEnabled) {
+            parts.push("no matching bag items");
+          }
+          if (fieldPatchEnabled) {
+            parts.push("no matching save fields");
+          }
+          console.log(`[save-patch] ${label} response checked; ${parts.join(", ")} (${Buffer.byteLength(originalText, "utf8")} bytes).`);
+        }
+
+        await client.send("Fetch.fulfillRequest", {
+          requestId: params.requestId,
+          responseCode: params.responseStatusCode,
+          responsePhrase: params.responseStatusText || "OK",
+          responseHeaders: responseHeadersArray(params.responseHeaders),
+          body: Buffer.from(nextText, "utf8").toString("base64"),
+        });
+      } catch (error) {
+        console.log(`[save-patch] ${label} response patch failed: ${error.message}`);
+        await client.send("Fetch.continueRequest", {
+          requestId: params.requestId,
+        });
+      }
+      return true;
+    },
+  };
+}
+
+function isMockSaveProtectionEnabled() {
+  const value = process.env.LAUNCH_360X_SAVE_PROTECTION;
+  if (value === "1" || /^true$/i.test(value || "")) {
+    return true;
+  }
+  if (value === "0" || /^false$/i.test(value || "")) {
+    return false;
+  }
+  return process.env.LAUNCH_360X_MOCK_SAVE_MODE === "local-session";
+}
+
+function fetchPatternsForMockSession(saveProtectionEnabled, saveReadPatchEnabled) {
   const patterns = [
     {
       urlPattern: "*xfbbv451.swf*",
@@ -1124,13 +1671,23 @@ function fetchPatternsForMockSession() {
       urlPattern: "*://www.4399.com/httpsNot301/flashdist.js*",
       requestStage: "Request",
     },
-    {
-      urlPattern: "*://save.api.4399.com/*",
-      requestStage: "Request",
-    },
   ];
 
-  if (process.env.LAUNCH_360X_MOCK_SAVE_MODE === "local-session") {
+  if (saveProtectionEnabled) {
+    patterns.push({
+      urlPattern: "*://save.api.4399.com/*",
+      requestStage: "Request",
+    });
+  }
+
+  if (saveProtectionEnabled && process.env.LAUNCH_360X_MOCK_SAVE_MODE === "local-session") {
+    patterns.push({
+      urlPattern: "*://save.api.4399.com/*",
+      requestStage: "Response",
+    });
+  }
+
+  if (saveReadPatchEnabled) {
     patterns.push({
       urlPattern: "*://save.api.4399.com/*",
       requestStage: "Response",
@@ -1174,6 +1731,10 @@ async function main() {
     : path.join(projectRoot, "modified", "local", "xfbbv451.swf");
   const officialSaveTest = process.env.LAUNCH_360X_OFFICIAL_SAVE_TEST === "1";
   const swfBytes = officialSaveTest ? null : fs.readFileSync(swfPath);
+  const saveProtectionEnabled = !officialSaveTest && isMockSaveProtectionEnabled();
+  const saveItemFilterEnabled = !officialSaveTest && isSaveItemFilterEnabled();
+  const saveFieldPatchEnabled = !officialSaveTest && isSaveFieldPatchEnabled();
+  const saveReadPatchEnabled = saveItemFilterEnabled || saveFieldPatchEnabled;
   const targetUrl = process.env.LAUNCH_360X_URL || officialGameUrl;
   const useIsolatedProfile = process.env.LAUNCH_360X_PROFILE === "isolated";
   const running360XPids = useIsolatedProfile ? [] : getRunning360XProcessIds();
@@ -1186,6 +1747,10 @@ async function main() {
   const args = [
     `--remote-debugging-port=${debugPort}`,
     "--remote-allow-origins=*",
+    "--enable-system-flash",
+    "--no-sandbox",
+    "--allow-outdated-plugins",
+    "--always-authorize-plugins",
     "--new-window",
     "about:blank",
   ];
@@ -1228,11 +1793,28 @@ async function main() {
   const client = new CdpClient(target.webSocketDebuggerUrl);
   await client.connect();
 
-  const saveProtection = officialSaveTest ? null : enableMockSaveProtection(client);
+  const saveProtection = saveProtectionEnabled ? enableMockSaveProtection(client) : null;
+  const saveReadPatch = saveReadPatchEnabled
+    ? enableSaveReadResponsePatch(client, { itemFilterEnabled: saveItemFilterEnabled, fieldPatchEnabled: saveFieldPatchEnabled })
+    : null;
 
   if (!officialSaveTest) {
     client.on("Fetch.requestPaused", async (params) => {
       const requestUrl = params.request?.url || "";
+      if (typeof params.responseStatusCode === "number") {
+        if (saveReadPatch && await saveReadPatch.handlePausedResponse(params)) {
+          return;
+        }
+        if (saveProtection) {
+          await saveProtection.handlePausedRequest(params);
+        } else {
+          await client.send("Fetch.continueRequest", {
+            requestId: params.requestId,
+          });
+        }
+        return;
+      }
+
       if (/\/xfbbv451\.swf(?:[?#]|$)/i.test(requestUrl)) {
         console.log(`SWF replaced: ${requestUrl}`);
         await client.send("Fetch.fulfillRequest", {
@@ -1267,7 +1849,13 @@ async function main() {
       }
 
       if (isSaveApiUrl(requestUrl)) {
-        await saveProtection.handlePausedRequest(params);
+        if (saveProtection) {
+          await saveProtection.handlePausedRequest(params);
+        } else {
+          await client.send("Fetch.continueRequest", {
+            requestId: params.requestId,
+          });
+        }
         return;
       }
 
@@ -1285,7 +1873,7 @@ async function main() {
   await client.send("Network.setCacheDisabled", { cacheDisabled: true });
   if (!officialSaveTest) {
     await client.send("Fetch.enable", {
-      patterns: fetchPatternsForMockSession(),
+      patterns: fetchPatternsForMockSession(saveProtectionEnabled, saveReadPatchEnabled),
     });
     await client.send("Page.addScriptToEvaluateOnNewDocument", {
       source: buildPanelSource(),
@@ -1302,12 +1890,30 @@ async function main() {
     console.log("Save API logging: enabled for save.api.4399.com requests.");
   } else {
     console.log(`Local SWF: ${swfPath} (${swfBytes.length} bytes)`);
-    if (process.env.LAUNCH_360X_MOCK_SAVE_MODE === "local-session") {
+    if (!saveProtectionEnabled) {
+      console.log("Save protection: disabled; official save requests are not intercepted.");
+      console.log("Set LAUNCH_360X_SAVE_PROTECTION=1 to re-enable cached-original save protection.");
+    } else if (process.env.LAUNCH_360X_MOCK_SAVE_MODE === "local-session") {
       console.log("Save protection: save requests are stored in a local mock session and are not sent to the official API.");
       console.log(`Local mock save store: ${mockSaveStorePath}`);
     } else {
       console.log("Save protection: official save requests are rewritten with cached original save data before upload.");
       console.log("Set LAUNCH_360X_MOCK_SAVE_MODE=local-session to keep saves fully local for debugging.");
+    }
+    if (saveReadPatch?.itemFilterEnabled) {
+      if (saveReadPatch.clearAllBags) {
+        console.log("Save item filter: enabled for read responses; all b1-b12 bag slots are cleared.");
+      } else {
+        console.log(`Save item filter: enabled for read responses; blocked IDs: ${saveReadPatch.blockedIds.join(", ")}`);
+      }
+      console.log("This filter is non-persistent unless you save after entering.");
+    }
+    if (saveReadPatch?.fieldPatchEnabled) {
+      const summary = Object.entries(saveReadPatch.fieldOverrides)
+        .map(([key, value]) => `${key}=${value}`)
+        .join(", ");
+      console.log(`Save field patch: enabled for read responses; overrides: ${summary}`);
+      console.log("This patch is read-time only and does not write cloud saves.");
     }
   }
   if (useIsolatedProfile) {

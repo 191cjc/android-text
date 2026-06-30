@@ -44,7 +44,14 @@ async function main() {
     ? `${server.url}play-local.html`
     : (process.env.LAUNCH_360X_URL || officialGameUrl);
 
-  const args = ["--new-window", targetUrl];
+  const args = [
+    "--enable-system-flash",
+    "--no-sandbox",
+    "--allow-outdated-plugins",
+    "--always-authorize-plugins",
+    "--new-window",
+    targetUrl,
+  ];
   if (debugPort) {
     args.unshift(`--remote-debugging-port=${debugPort}`);
     args.unshift("--remote-allow-origins=*");
