@@ -20,11 +20,13 @@ const backupPath = path.join(projectRoot, "modified", "L4399Main_gamefile.before
 const encodedSlotFactor = 11000;
 const fixedPetSlot = 1;
 const callbackFunctionName = "dataIndexYouData";
+const bagPanelTriggerCallbackName = "codexSendBagItems";
 const enablePetMockPatch = process.env.CODEX_DISABLE_PET_MOCK_PATCH !== "1";
 const enableSaveGuardPatch = process.env.CODEX_DISABLE_SAVE_GUARD_PATCH !== "1";
 const enableCurrencyMockPatch = process.env.CODEX_DISABLE_CURRENCY_MOCK_PATCH !== "1";
 const petMockPatchMode = process.env.CODEX_PET_MOCK_PATCH_MODE || "fixed-slot";
-const enableBagGiftPatch = process.env.CODEX_ENABLE_BAG_GIFT_MOCK === "1" || process.env.CODEX_ENABLE_BAG_MOCK === "1";
+const enableBagPanelButtonPatch = process.env.CODEX_ENABLE_BAG_PANEL_BUTTON_MOCK === "1" || process.env.CODEX_ENABLE_BAG_MOCK === "1";
+const enableBagGiftPatch = process.env.CODEX_ENABLE_BAG_GIFT_MOCK === "1";
 const enableBagSaveAfterCountPatch = process.env.CODEX_ENABLE_BAG_SAVE_AFTER_COUNT_MOCK === "1";
 const enableBagDisplayPatch = process.env.CODEX_ENABLE_BAG_DISPLAY_MOCK === "1";
 const enablePlayerBagPanelPatch = process.env.CODEX_ENABLE_PLAYER_BAG_PANEL_MOCK === "1";
@@ -50,6 +52,7 @@ const gameStartMethod = "hotpointgame.Control::GM::static::::gameStart";
 const addPetBypidMethod = "hotpointgame.pet::PetManager::::addPetBypid";
 const saveDataStartMethod = "hotpointgame.gameobj::Api4399::::saveDataStart";
 const saveProcessMethod = "hotpointgame.gameobj::Api4399::::saveProcess";
+const gmBaseDatainitMethod = "hotpointgame.Control::GM::static::::baseDatainit";
 const petRReadDataMethod = "hotpointgame.pet::PetR::static::::readData";
 const addPetSkillBypidMethod = "hotpointgame.pet::PetManager::::addPetSkillBypid";
 const petSkillReadDataMethod = "hotpointgame.pet::PetSkillShowSaveD::static::::readData";
@@ -512,6 +515,14 @@ function stringIndexFor(abc, ...values) {
   throw new Error(`Missing string constant: ${values.join(" or ")}`);
 }
 
+function multinameIndexFor(abc, predicate, label) {
+  const index = abc.multinames.findIndex((item, itemIndex) => itemIndex > 0 && predicate(item, itemIndex));
+  if (index >= 0) {
+    return index;
+  }
+  throw new Error(`Missing multiname constant: ${label}`);
+}
+
 function disassembleBody(abc, body) {
   return instructionsFor(body).map((decoded) => {
     const detail = operandDescription(abc, decoded);
@@ -536,6 +547,215 @@ function bodyHasCallback(abc, body, kind) {
   return instructionsFor(body).some((decoded) =>
     decoded.name === "pushstring" && decoded.operands[0] === kindIndex
   );
+}
+
+function bodyHasString(abc, body, value) {
+  const index = abc.strings.findIndex((item) => item === value);
+  if (index < 0) {
+    return false;
+  }
+  return instructionsFor(body).some((decoded) =>
+    decoded.name === "pushstring" && decoded.operands[0] === index
+  );
+}
+
+function constantPoolOffsets(abcBuffer) {
+  const reader = new Reader(abcBuffer);
+  reader.u16();
+  reader.u16();
+
+  let count = reader.u30();
+  for (let i = 1; i < count; i += 1) reader.u30();
+
+  count = reader.u30();
+  for (let i = 1; i < count; i += 1) reader.u30();
+
+  count = reader.u30();
+  reader.offset += Math.max(0, count - 1) * 8;
+
+  const stringCountOffset = reader.offset;
+  const stringCount = reader.u30();
+  for (let i = 1; i < stringCount; i += 1) {
+    reader.bytes(reader.u30());
+  }
+  const stringsEnd = reader.offset;
+
+  count = reader.u30();
+  for (let i = 1; i < count; i += 1) {
+    reader.u8();
+    reader.u30();
+  }
+
+  count = reader.u30();
+  for (let i = 1; i < count; i += 1) {
+    const setCount = reader.u30();
+    for (let j = 0; j < setCount; j += 1) reader.u30();
+  }
+
+  const multinameCountOffset = reader.offset;
+  const multinameCount = reader.u30();
+  for (let i = 1; i < multinameCount; i += 1) {
+    const kind = reader.u8();
+    if (kind === 0x07 || kind === 0x0d) {
+      reader.u30();
+      reader.u30();
+    } else if (kind === 0x0f || kind === 0x10) {
+      reader.u30();
+    } else if (kind === 0x11 || kind === 0x12) {
+      // Marker-only multiname.
+    } else if (kind === 0x09 || kind === 0x0e) {
+      reader.u30();
+      reader.u30();
+    } else if (kind === 0x1b || kind === 0x1c) {
+      reader.u30();
+    } else if (kind === 0x1d) {
+      reader.u30();
+      const paramCount = reader.u30();
+      for (let j = 0; j < paramCount; j += 1) reader.u30();
+    } else {
+      throw new Error(`Unsupported multiname kind ${kind}`);
+    }
+  }
+
+  return {
+    stringCountOffset,
+    stringsEnd,
+    multinameCountOffset,
+    multinamesEnd: reader.offset,
+  };
+}
+
+function ensureStringConstant(abcBuffer, abc, value) {
+  const existing = abc.strings.findIndex((item) => item === value);
+  if (existing >= 0) {
+    return { abcBuffer, index: existing, changed: false };
+  }
+
+  const offsets = constantPoolOffsets(abcBuffer);
+  const oldCountInfo = readU30At(abcBuffer, offsets.stringCountOffset);
+  const encodedCount = encodeU30(oldCountInfo.value + 1);
+  const raw = Buffer.from(value, "utf8");
+  const entry = Buffer.concat([encodeU30(raw.length), raw]);
+  const nextAbcBuffer = Buffer.concat([
+    abcBuffer.subarray(0, offsets.stringCountOffset),
+    encodedCount,
+    abcBuffer.subarray(offsets.stringCountOffset + oldCountInfo.length, offsets.stringsEnd),
+    entry,
+    abcBuffer.subarray(offsets.stringsEnd),
+  ]);
+
+  return {
+    abcBuffer: nextAbcBuffer,
+    index: oldCountInfo.value,
+    changed: true,
+  };
+}
+
+function ensureMultinameKind9(abcBuffer, abc, nameIndex, nssetIndex, label) {
+  const existing = abc.multinames.findIndex((item) =>
+    item?.kind === 0x09 &&
+    item.name === nameIndex &&
+    item.nsset === nssetIndex
+  );
+  if (existing >= 0) {
+    return { abcBuffer, index: existing, changed: false };
+  }
+
+  const offsets = constantPoolOffsets(abcBuffer);
+  const oldCountInfo = readU30At(abcBuffer, offsets.multinameCountOffset);
+  const encodedCount = encodeU30(oldCountInfo.value + 1);
+  const entry = Buffer.concat([
+    Buffer.from([0x09]),
+    encodeU30(nameIndex),
+    encodeU30(nssetIndex),
+  ]);
+  const nextAbcBuffer = Buffer.concat([
+    abcBuffer.subarray(0, offsets.multinameCountOffset),
+    encodedCount,
+    abcBuffer.subarray(offsets.multinameCountOffset + oldCountInfo.length, offsets.multinamesEnd),
+    entry,
+    abcBuffer.subarray(offsets.multinamesEnd),
+  ]);
+
+  return {
+    abcBuffer: nextAbcBuffer,
+    index: oldCountInfo.value,
+    changed: true,
+  };
+}
+
+function ensureBagPanelCallbackConstants(abcBuffer) {
+  let nextAbcBuffer = abcBuffer;
+  let abc = parseAbc(nextAbcBuffer);
+  const stringChanges = [];
+
+  let ensured = ensureStringConstant(nextAbcBuffer, abc, "addCallback");
+  nextAbcBuffer = ensured.abcBuffer;
+  if (ensured.changed) {
+    stringChanges.push("addCallback");
+    abc = parseAbc(nextAbcBuffer);
+  }
+  const addCallbackString = ensured.index;
+
+  ensured = ensureStringConstant(nextAbcBuffer, abc, "available");
+  nextAbcBuffer = ensured.abcBuffer;
+  if (ensured.changed) {
+    stringChanges.push("available");
+    abc = parseAbc(nextAbcBuffer);
+  }
+  const availableString = ensured.index;
+
+  ensured = ensureStringConstant(nextAbcBuffer, abc, bagPanelTriggerCallbackName);
+  nextAbcBuffer = ensured.abcBuffer;
+  if (ensured.changed) {
+    stringChanges.push(bagPanelTriggerCallbackName);
+    abc = parseAbc(nextAbcBuffer);
+  }
+  const panelCallbackString = ensured.index;
+
+  const saveProcessBody = methodBodyFor(abc, saveProcessMethod);
+  if (!saveProcessBody) {
+    throw new Error(`${saveProcessMethod} is required to reuse ExternalInterface operands`);
+  }
+  const externalCall = operandFor(abc, saveProcessBody, "callproperty", "::call");
+  const callMultiname = abc.multinames[externalCall];
+  if (!callMultiname || callMultiname.kind !== 0x09 || !callMultiname.nsset) {
+    throw new Error("ExternalInterface.call multiname is not a multiname-set entry");
+  }
+
+  const addCallbackMultiname = ensureMultinameKind9(
+    nextAbcBuffer,
+    abc,
+    addCallbackString,
+    callMultiname.nsset,
+    "::addCallback"
+  );
+  nextAbcBuffer = addCallbackMultiname.abcBuffer;
+  if (addCallbackMultiname.changed) {
+    abc = parseAbc(nextAbcBuffer);
+  }
+
+  const availableMultiname = ensureMultinameKind9(
+    nextAbcBuffer,
+    abc,
+    availableString,
+    callMultiname.nsset,
+    "::available"
+  );
+  nextAbcBuffer = availableMultiname.abcBuffer;
+
+  return {
+    abcBuffer: nextAbcBuffer,
+    constants: {
+      stringChanges,
+      addCallbackString,
+      availableString,
+      panelCallbackString,
+      addCallbackMultiname: addCallbackMultiname.index,
+      availableMultiname: availableMultiname.index,
+      callNsset: callMultiname.nsset,
+    },
+  };
 }
 
 function insertMethodCode(abcBuffer, headers, body, insertOffset, insertCode, label, options = {}) {
@@ -872,6 +1092,7 @@ function buildBagInsertCode(abc, saveProcessBody, bagSjChFunBody, options = {}) 
   const goodsNumString = stringIndexFor(abc, bagItemCountCallbackKind);
   const addInBagById = operandFor(abc, bagSjChFunBody, "callpropvoid", "::addInBagById");
   const isFullById = operandFor(abc, bagSjChFunBody, "callproperty", "::isFullById");
+  const hdGoodsTs = options.notify ? operandFor(abc, bagSjChFunBody, "callpropvoid", "::hdGoodsTs") : null;
 
   const callbackCall = (kindString, slotCode) => {
     const args = [
@@ -936,6 +1157,14 @@ function buildBagInsertCode(abc, saveProcessBody, bagSjChFunBody, options = {}) 
     getLocal(4),
     pushIntLiteral(0),
     instruction(0x4f, addInBagById, 3), // callpropvoid addInBagById, 3
+    ...(options.notify
+      ? [
+        instruction(0x5d, hdGoodsTs), // findpropstrict hdGoodsTs
+        getLocal(3),
+        getLocal(4),
+        instruction(0x4f, hdGoodsTs, 2), // callpropvoid hdGoodsTs, 2
+      ]
+      : []),
     label(`skipBagMock${index}`),
   ];
 
@@ -966,7 +1195,59 @@ function buildBagInsertCode(abc, saveProcessBody, bagSjChFunBody, options = {}) 
       goodsNumString,
       addInBagById,
       isFullById,
+      ...(options.notify ? { hdGoodsTs } : {}),
       ...(options.snapshot ? { bagSnapshot: true } : {}),
+    },
+  };
+}
+
+function buildBagPanelTriggerCode(abc, saveProcessBody, bagSjChFunBody) {
+  const bagBuilt = buildBagInsertCode(abc, saveProcessBody, bagSjChFunBody, { done: true, notify: true });
+  return {
+    code: assemble([
+      Buffer.from([0xd0, 0x30]), // getlocal0, pushscope
+      bagBuilt.code,
+      Buffer.from([0x47]), // returnvoid
+    ]),
+    operands: bagBuilt.operands,
+  };
+}
+
+function buildBagPanelCallbackRegistrationCode(abc, saveProcessBody, constants) {
+  const externalInterface = operandFor(abc, saveProcessBody, "getlex", "::ExternalInterface");
+  const bagFactory = multinameIndexFor(
+    abc,
+    (item) => (qname(item) || "").endsWith("::BagFactory"),
+    "::BagFactory"
+  );
+  const bcLb = multinameIndexFor(
+    abc,
+    (item) => (qname(item) || "").endsWith("::bcLb"),
+    "::bcLb"
+  );
+
+  const code = assemble([
+    instruction(0x60, externalInterface), // getlex ExternalInterface
+    instruction(0x66, constants.availableMultiname), // getproperty available
+    branch(0x12, "skipBagPanelCallbackRegistration"), // iffalse
+    instruction(0x60, externalInterface), // getlex ExternalInterface
+    instruction(0x2c, constants.panelCallbackString), // pushstring codexSendBagItems
+    instruction(0x60, bagFactory), // getlex BagFactory
+    instruction(0x66, bcLb), // getproperty bcLb
+    instruction(0x46, constants.addCallbackMultiname, 2), // callproperty addCallback, 2
+    Buffer.from([0x29]), // pop
+    label("skipBagPanelCallbackRegistration"),
+  ]);
+
+  return {
+    code,
+    operands: {
+      externalInterface,
+      bagFactory,
+      bcLb,
+      addCallback: constants.addCallbackMultiname,
+      available: constants.availableMultiname,
+      panelCallbackString: constants.panelCallbackString,
     },
   };
 }
@@ -1151,10 +1432,10 @@ function patch() {
     const petRReadDataBody = methodBodyFor(abc, petRReadDataMethod);
     const petRPetlWSkillByGodBody = methodBodyFor(abc, petRPetlWSkillByGodMethod);
     const currencySaveProcessBody = enableCurrencyMockPatch ? methodBodyFor(abc, saveProcessMethod) : null;
-    const bagSjChFunBody = (enableBagGiftPatch || enableBagSaveAfterCountPatch || enablePlayerBagPanelPatch || enableBagReadPatch || enableBagGameStartPatch)
+    const bagSjChFunBody = (enableBagPanelButtonPatch || enableBagGiftPatch || enableBagSaveAfterCountPatch || enablePlayerBagPanelPatch || enableBagReadPatch || enableBagGameStartPatch)
       ? methodBodyFor(abc, bagFactorySjChFunMethod)
       : null;
-    const bagBcLbBody = enableBagGiftPatch ? methodBodyFor(abc, bagFactoryBcLbMethod) : null;
+    const bagBcLbBody = (enableBagPanelButtonPatch || enableBagGiftPatch) ? methodBodyFor(abc, bagFactoryBcLbMethod) : null;
 
     if (enableCurrencyMockPatch && currencySaveProcessBody) {
       for (const methodName of currencyGetterMethods) {
@@ -1250,7 +1531,88 @@ function patch() {
       headers = methodBodyHeaders(abcBuffer);
     }
 
-    if (enableBagGiftPatch && bagBcLbBody && saveProcessBody && bagSjChFunBody) {
+    if (enableBagPanelButtonPatch && bagBcLbBody && saveProcessBody && bagSjChFunBody) {
+      const before = disassembleBody(abc, bagBcLbBody);
+      const built = buildBagPanelTriggerCode(abc, saveProcessBody, bagSjChFunBody);
+      const replaced = replaceMethodCode(
+        abcBuffer,
+        headers,
+        bagBcLbBody,
+        built.code,
+        bagFactoryBcLbMethod,
+        { maxStack: Math.max(bagBcLbBody.maxStack, 16), localCount: Math.max(bagBcLbBody.localCount, 5) }
+      );
+      abcBuffer = replaced.abcBuffer;
+      ensureBackup();
+
+      patched.push({
+        method: bagFactoryBcLbMethod,
+        bagMock: true,
+        trigger: "panel-button-callback-body",
+        codeLength: { oldValue: bagBcLbBody.code.length, newValue: built.code.length },
+        patches: replaced.patches,
+        operands: built.operands,
+        before,
+      });
+
+      abc = parseAbc(abcBuffer);
+      headers = methodBodyHeaders(abcBuffer);
+
+      const constantsResult = ensureBagPanelCallbackConstants(abcBuffer);
+      abcBuffer = constantsResult.abcBuffer;
+      abc = parseAbc(abcBuffer);
+      headers = methodBodyHeaders(abcBuffer);
+
+      const gmBaseDatainitBody = methodBodyFor(abc, gmBaseDatainitMethod);
+      const saveProcessBodyForPanel = methodBodyFor(abc, saveProcessMethod);
+      if (gmBaseDatainitBody && saveProcessBodyForPanel) {
+        if (bodyHasString(abc, gmBaseDatainitBody, bagPanelTriggerCallbackName)) {
+          patched.push({
+            method: gmBaseDatainitMethod,
+            bagMock: true,
+            trigger: "register-panel-button-callback",
+            alreadyPatched: true,
+          });
+        } else {
+          const registerBefore = disassembleBody(abc, gmBaseDatainitBody);
+          const insertOffset = instructionAfter(abc, gmBaseDatainitBody, "callpropvoid", "::gameStart");
+          const registration = buildBagPanelCallbackRegistrationCode(
+            abc,
+            saveProcessBodyForPanel,
+            constantsResult.constants
+          );
+          const inserted = insertMethodCode(
+            abcBuffer,
+            headers,
+            gmBaseDatainitBody,
+            insertOffset,
+            registration.code,
+            gmBaseDatainitMethod,
+            { maxStack: Math.max(gmBaseDatainitBody.maxStack, 4), localCount: gmBaseDatainitBody.localCount }
+          );
+          abcBuffer = inserted.abcBuffer;
+          ensureBackup();
+
+          patched.push({
+            method: gmBaseDatainitMethod,
+            bagMock: true,
+            trigger: "register-panel-button-callback",
+            insertOffset,
+            codeLength: {
+              oldValue: gmBaseDatainitBody.code.length,
+              newValue: gmBaseDatainitBody.code.length + registration.code.length,
+            },
+            constants: constantsResult.constants,
+            patches: inserted.patches,
+            operands: registration.operands,
+            before: registerBefore,
+          });
+
+          abc = parseAbc(abcBuffer);
+          headers = methodBodyHeaders(abcBuffer);
+        }
+      }
+    } else if (enableBagGiftPatch && bagBcLbBody && saveProcessBody && bagSjChFunBody) {
       if (bodyHasCallback(abc, bagBcLbBody, bagItemIdCallbackKind)) {
         patched.push({
           method: bagFactoryBcLbMethod,
@@ -1503,6 +1865,7 @@ function patch() {
     ...(enableCurrencyMockPatch ? currencyGetterMethods : []),
     ...(enablePetMockPatch || enableBagSaveAfterCountPatch ? [saveAfterCountMethod] : []),
     ...(enableSaveGuardPatch ? [saveDataStartMethod] : []),
+    ...(enableBagPanelButtonPatch ? [bagFactoryBcLbMethod, gmBaseDatainitMethod] : []),
     ...(enableBagGiftPatch ? [bagFactoryBcLbMethod] : []),
     ...(enableBagDisplayPatch ? [bagDisplayInitGoodsDisplayMethod] : []),
     ...(enablePlayerBagPanelPatch ? [playerBagPanelInitPanelMethod] : []),
@@ -1529,6 +1892,7 @@ function patch() {
     enableSaveGuardPatch,
     enableCurrencyMockPatch,
     petMockPatchMode,
+    enableBagPanelButtonPatch,
     enableBagGiftPatch,
     enableBagSaveAfterCountPatch,
     enableBagDisplayPatch,

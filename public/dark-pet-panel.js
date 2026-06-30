@@ -62,8 +62,6 @@
     useSkill4Level: 1,
     useSkill4Exp: 0,
     petLastReadAt: 0,
-    bagEnabled: false,
-    bagConsumeOnUse: false,
     bagItemId: defaultBagItem.id,
     bagItemCount: 1,
     bagItems: [],
@@ -74,6 +72,8 @@
     currencyEnabled: false,
     currencyValue: 0,
     currencyLastReadAt: 0,
+    shopBuyEnabled: false,
+    shopBuyLastReadAt: 0,
     logs: [],
   };
 
@@ -85,7 +85,6 @@
 
   let state = loadState();
   let panelState = loadPanelState();
-  let bagTouchClearTimer = null;
 
   function clampNumber(value, fallback, min, max) {
     const parsed = Number.parseInt(String(value), 10);
@@ -107,7 +106,7 @@
 
   function normalizeState(value) {
     const source = value && typeof value === "object" ? value : {};
-    const allowedTabs = BAG_UI_ENABLED ? ["pet", "bag", "currency", "params", "logs"] : ["pet", "currency", "params", "logs"];
+    const allowedTabs = BAG_UI_ENABLED ? ["pet", "bag", "currency", "shop", "params", "logs"] : ["pet", "currency", "shop", "params", "logs"];
     const activeTab = allowedTabs.includes(source.activeTab)
       ? source.activeTab
       : source.activeTab === "monitor"
@@ -123,13 +122,6 @@
       .filter((item) => item.id > 0)
       .slice(0, MAX_BAG_ITEMS);
 
-    if (normalizedBagItems.length === 0 && source.bagEnabled && source.bagItemId) {
-      normalizedBagItems.push({
-        id: clampNumber(source.bagItemId, DEFAULT_STATE.bagItemId, 1, 999999),
-        count: clampNumber(source.bagItemCount, DEFAULT_STATE.bagItemCount, 1, 999),
-      });
-    }
-
     const normalized = {
       activeTab,
       petEnabled: Boolean(source.petEnabled),
@@ -141,8 +133,6 @@
       petSlot: clampNumber(source.petSlot, DEFAULT_STATE.petSlot, 1, 99),
       petStage: clampNumber(source.petStage, DEFAULT_STATE.petStage, 0, 4),
       petLastReadAt: clampNumber(source.petLastReadAt, DEFAULT_STATE.petLastReadAt, 0, 9999999999999),
-      bagEnabled: Boolean(source.bagEnabled),
-      bagConsumeOnUse: Boolean(source.bagConsumeOnUse),
       bagItemId: clampNumber(source.bagItemId, DEFAULT_STATE.bagItemId, 1, 999999),
       bagItemCount: clampNumber(source.bagItemCount, DEFAULT_STATE.bagItemCount, 1, 999),
       bagItems: normalizedBagItems,
@@ -153,11 +143,12 @@
       currencyEnabled: Boolean(source.currencyEnabled),
       currencyValue: clampNumber(source.currencyValue, DEFAULT_STATE.currencyValue, 0, 999999999),
       currencyLastReadAt: clampNumber(source.currencyLastReadAt, DEFAULT_STATE.currencyLastReadAt, 0, 9999999999999),
+      shopBuyEnabled: Boolean(source.shopBuyEnabled),
+      shopBuyLastReadAt: clampNumber(source.shopBuyLastReadAt, DEFAULT_STATE.shopBuyLastReadAt, 0, 9999999999999),
       logs: Array.isArray(source.logs) ? source.logs.slice(-MAX_LOGS) : [],
     };
 
     if (!BAG_UI_ENABLED) {
-      normalized.bagEnabled = false;
       normalized.bagItems = [];
       normalized.bagLastReadAt = 0;
     }
@@ -374,24 +365,64 @@
 
   function markBagTouched() {
     log("Flash 读取背包 mock", selectedBagItemsLabel());
-    const next = { bagLastReadAt: Date.now() };
-    if (state.bagConsumeOnUse) {
-      next.bagEnabled = false;
-      saveState(next);
-      if (!bagTouchClearTimer) {
-        bagTouchClearTimer = window.setTimeout(() => {
-          bagTouchClearTimer = null;
-          saveState({ bagItems: [] });
-        }, 0);
+    saveState({ bagLastReadAt: Date.now() });
+  }
+
+  function findFlashCallback(callbackName) {
+    const candidates = [];
+    if (window[callbackName] && typeof window[callbackName] === "function") {
+      candidates.push(window);
+    }
+    for (const item of document.querySelectorAll("object, embed")) {
+      candidates.push(item);
+    }
+    for (const frame of document.querySelectorAll("iframe")) {
+      try {
+        if (frame.contentWindow) {
+          candidates.push(frame.contentWindow);
+        }
+        if (frame.contentDocument) {
+          candidates.push(...frame.contentDocument.querySelectorAll("object, embed"));
+        }
+      } catch {
+        // Cross-origin frames are not callable from the panel.
       }
-    } else {
-      saveState(next);
+    }
+    return candidates.find((item) => item && typeof item[callbackName] === "function") || null;
+  }
+
+  function sendBagItemsNow() {
+    const current = normalizeState(state);
+    if (current.bagItems.length === 0) {
+      log("发送道具失败", "队列为空");
+      return;
+    }
+
+    const callbackName = "codexSendBagItems";
+    const target = findFlashCallback(callbackName);
+    if (!target) {
+      log("发送道具失败", `未找到 Flash 回调 ${callbackName}`);
+      renderStatus();
+      return;
+    }
+
+    try {
+      target[callbackName]();
+      log("发送道具已触发", selectedBagItemsLabel());
+    } catch (error) {
+      log("发送道具异常", error && error.message ? error.message : String(error));
+      renderStatus();
     }
   }
 
   function markCurrencyTouched(value) {
     log("Flash currency mock read", `goldCurr=${value}`);
     saveState({ currencyLastReadAt: Date.now() });
+  }
+
+  function markShopBuyTouched() {
+    log("Flash shop buy mock read", "buyShopProp local success");
+    saveState({ shopBuyLastReadAt: Date.now() });
   }
 
   function recordBagSnapshot(payload) {
@@ -458,6 +489,10 @@
       return window.codexCurrencyMockValue();
     }
 
+    if (kind === "buyShopProp" || kind === "shopBuy") {
+      return window.codexShopBuyMockEnabled();
+    }
+
     if (kind === "curLWJieDuan" || kind === "petStage") {
       return String(normalizeState(state).petStage);
     }
@@ -487,9 +522,6 @@
       return "0";
     }
     const current = normalizeState(state);
-    if (!current.bagEnabled) {
-      return "0";
-    }
     const index = clampNumber(arguments.length > 1 ? arguments[1] : 0, 0, 0, MAX_BAG_ITEMS - 1);
     const item = current.bagItems[index];
     if (!item) {
@@ -506,7 +538,7 @@
       return "0";
     }
     const current = normalizeState(state);
-    if (!current.bagEnabled || current.bagItems.length === 0) {
+    if (current.bagItems.length === 0) {
       return "0";
     }
     markBagTouched();
@@ -520,6 +552,15 @@
     }
     markCurrencyTouched(current.currencyValue);
     return String(current.currencyValue);
+  };
+
+  window.codexShopBuyMockEnabled = function () {
+    const current = normalizeState(state);
+    if (!current.shopBuyEnabled) {
+      return "0";
+    }
+    markShopBuyTouched();
+    return "1";
   };
 
   window.codexPetSnapshot = function () {
@@ -547,7 +588,7 @@
         z-index: 2147483647;
         right: 18px;
         top: 82px;
-        width: 520px;
+        width: 760px;
         max-width: calc(100vw - 20px);
         border: 1px solid rgba(255,255,255,.16);
         border-radius: 8px;
@@ -631,6 +672,7 @@
         display: grid;
         grid-template-columns: 112px 1fr;
         min-height: 410px;
+        max-height: calc(100vh - 104px);
       }
       #codex-runtime-mock-panel[data-minimized="1"] {
         width: 280px;
@@ -661,6 +703,7 @@
       #codex-runtime-mock-panel .content {
         min-width: 0;
         padding: 12px;
+        overflow: auto;
       }
       #codex-runtime-mock-panel .sectionTitle {
         margin: 0 0 10px;
@@ -765,6 +808,40 @@
       #codex-runtime-mock-panel .muted {
         color: #8f99a3;
       }
+      #codex-runtime-mock-panel .bagLayout {
+        display: grid;
+        grid-template-columns: minmax(170px, .75fr) minmax(170px, .8fr) minmax(245px, 1.1fr);
+        gap: 12px;
+        align-items: start;
+      }
+      #codex-runtime-mock-panel .bagMainColumn,
+      #codex-runtime-mock-panel .bagQueueColumn,
+      #codex-runtime-mock-panel .bagSearchColumn {
+        min-width: 0;
+      }
+      #codex-runtime-mock-panel .bagQueueColumn,
+      #codex-runtime-mock-panel .bagSearchColumn {
+        padding-left: 12px;
+        border-left: 1px solid rgba(255,255,255,.08);
+      }
+      #codex-runtime-mock-panel .bagSearchColumn {
+        display: grid;
+        align-content: start;
+        gap: 6px;
+      }
+      #codex-runtime-mock-panel .bagQueueList {
+        max-height: 198px;
+      }
+      #codex-runtime-mock-panel .bagItemList {
+        max-height: 300px;
+      }
+      #codex-runtime-mock-panel .bagQueueColumn .sectionTitle,
+      #codex-runtime-mock-panel .bagSearchColumn .sectionTitle {
+        margin-bottom: 6px;
+      }
+      #codex-runtime-mock-panel .bagSearchColumn label {
+        margin-top: 0;
+      }
       @media (max-width: 520px) {
         #codex-runtime-mock-panel {
           left: 10px;
@@ -787,6 +864,16 @@
         }
         #codex-runtime-mock-panel .row.three {
           grid-template-columns: 1fr;
+        }
+        #codex-runtime-mock-panel .bagLayout {
+          grid-template-columns: 1fr;
+        }
+        #codex-runtime-mock-panel .bagQueueColumn,
+        #codex-runtime-mock-panel .bagSearchColumn {
+          padding-left: 0;
+          border-left: 0;
+          border-top: 1px solid rgba(255,255,255,.08);
+          padding-top: 10px;
         }
       }
     `;
@@ -816,6 +903,17 @@
       </div>
     `;
     document.body.appendChild(root);
+
+    const tabs = root.querySelector(".tabs");
+    const paramsTab = root.querySelector('[data-tab="params"]');
+    if (tabs && paramsTab && !root.querySelector('[data-tab="shop"]')) {
+      const shopTab = document.createElement("button");
+      shopTab.type = "button";
+      shopTab.className = "tab";
+      shopTab.dataset.tab = "shop";
+      shopTab.textContent = "商城";
+      tabs.insertBefore(shopTab, paramsTab);
+    }
 
     if (panelState.x !== null && panelState.y !== null) {
       root.style.left = `${Math.max(0, panelState.x)}px`;
@@ -868,14 +966,8 @@
       log("宠物 mock 已关闭");
       return;
     }
-    if (action === "bag-enable") {
-      saveState({ bagEnabled: true });
-      log("背包 mock 已开启", selectedBagItemsLabel());
-      return;
-    }
-    if (action === "bag-disable") {
-      saveState({ bagEnabled: false });
-      log("背包 mock 已关闭");
+    if (action === "send-bag-items-now") {
+      sendBagItemsNow();
       return;
     }
     if (action === "currency-enable") {
@@ -886,6 +978,16 @@
     if (action === "currency-disable") {
       saveState({ currencyEnabled: false });
       log("晶币 mock 已关闭");
+      return;
+    }
+    if (action === "shop-buy-enable") {
+      saveState({ shopBuyEnabled: true });
+      log("商城购买 mock 已开启", "星际商城购买将本地回调成功");
+      return;
+    }
+    if (action === "shop-buy-disable") {
+      saveState({ shopBuyEnabled: false });
+      log("商城购买 mock 已关闭", "购买继续走官方接口");
       return;
     }
     if (action === "select-item") {
@@ -902,19 +1004,19 @@
           count: current.bagItemCount,
         },
       ].slice(0, MAX_BAG_ITEMS);
-      saveState({ bagItems: nextItems, bagEnabled: nextItems.length > 0 });
+      saveState({ bagItems: nextItems });
       log("添加道具队列", bagItemLabel(nextItems[nextItems.length - 1]));
       return;
     }
     if (action === "remove-bag-item") {
       const index = clampNumber(target.dataset.itemIndex, -1, -1, MAX_BAG_ITEMS - 1);
       const nextItems = normalizeState(state).bagItems.filter((_, itemIndex) => itemIndex !== index);
-      saveState({ bagItems: nextItems, bagEnabled: nextItems.length > 0 && state.bagEnabled });
+      saveState({ bagItems: nextItems });
       log("移除道具队列", `第 ${index + 1} 项`);
       return;
     }
     if (action === "clear-bag-items") {
-      saveState({ bagItems: [], bagEnabled: false });
+      saveState({ bagItems: [] });
       log("清空道具队列");
       return;
     }
@@ -954,14 +1056,13 @@
     if (field === "petSlotMode") next.petSlotMode = target.value;
     if (field === "petSlot") next.petSlot = target.value;
     if (field === "petStage") next.petStage = target.value;
-    if (field === "bagEnabled") next.bagEnabled = target.checked;
-    if (field === "bagConsumeOnUse") next.bagConsumeOnUse = target.checked;
     if (field === "bagItemId") next.bagItemId = target.value;
     if (field === "bagItemCount") next.bagItemCount = target.value;
     if (field === "bagFilterBag") next.bagFilterBag = target.value;
     if (field === "bagFilterType") next.bagFilterType = target.value;
     if (field === "currencyEnabled") next.currencyEnabled = target.checked;
     if (field === "currencyValue") next.currencyValue = target.value;
+    if (field === "shopBuyEnabled") next.shopBuyEnabled = target.checked;
     for (const prefix of ["lwSkill1", "useSkill1", "useSkill2", "useSkill3", "useSkill4"]) {
       if (field === `${prefix}Enabled`) next[`${prefix}Enabled`] = target.checked;
       if (field === `${prefix}Id`) next[`${prefix}Id`] = target.value;
@@ -993,6 +1094,7 @@
     if (!content) {
       return;
     }
+    content.dataset.tab = state.activeTab;
 
     if (state.activeTab === "pet") {
       content.innerHTML = renderPetTab();
@@ -1002,6 +1104,8 @@
       renderItemList("");
     } else if (state.activeTab === "currency") {
       content.innerHTML = renderCurrencyTab();
+    } else if (state.activeTab === "shop") {
+      content.innerHTML = renderShopTab();
     } else if (state.activeTab === "params") {
       content.innerHTML = renderParamsTab();
     } else {
@@ -1013,32 +1117,40 @@
   function renderStatus() {
     const root = document.getElementById("codex-runtime-mock-panel");
     const status = root?.querySelector("[data-role=status]");
-    if (status) {
-      const petReadFresh = state.petLastReadAt && Date.now() - state.petLastReadAt < 30000;
-      const bagReadFresh = state.bagLastReadAt && Date.now() - state.bagLastReadAt < 30000;
-      const currencyReadFresh = state.currencyLastReadAt && Date.now() - state.currencyLastReadAt < 30000;
-      if (petReadFresh) {
-        status.textContent = "宠物已读取";
-        status.dataset.active = "1";
-      } else if (bagReadFresh) {
-        status.textContent = "背包已读取";
-        status.dataset.active = "1";
-      } else if (currencyReadFresh) {
-        status.textContent = "晶币已读取";
-        status.dataset.active = "1";
-      } else if (state.petEnabled) {
-        status.textContent = "宠物待触发";
-        status.dataset.active = "2";
-      } else if (state.bagEnabled) {
-        status.textContent = "背包待触发";
-        status.dataset.active = "2";
-      } else if (state.currencyEnabled) {
-        status.textContent = "晶币待触发";
-        status.dataset.active = "2";
-      } else {
-        status.textContent = "关闭";
-        status.dataset.active = "0";
-      }
+    if (!status) {
+      return;
+    }
+
+    const freshWindow = 30000;
+    const petReadFresh = state.petLastReadAt && Date.now() - state.petLastReadAt < freshWindow;
+    const bagReadFresh = state.bagLastReadAt && Date.now() - state.bagLastReadAt < freshWindow;
+    const currencyReadFresh = state.currencyLastReadAt && Date.now() - state.currencyLastReadAt < freshWindow;
+    const shopBuyReadFresh = state.shopBuyLastReadAt && Date.now() - state.shopBuyLastReadAt < freshWindow;
+
+    if (petReadFresh) {
+      status.textContent = "宠物已触发";
+      status.dataset.active = "1";
+    } else if (bagReadFresh) {
+      status.textContent = "道具已触发";
+      status.dataset.active = "1";
+    } else if (currencyReadFresh) {
+      status.textContent = "晶币已触发";
+      status.dataset.active = "1";
+    } else if (shopBuyReadFresh) {
+      status.textContent = "商城购买已触发";
+      status.dataset.active = "1";
+    } else if (state.petEnabled) {
+      status.textContent = "宠物待触发";
+      status.dataset.active = "2";
+    } else if (state.currencyEnabled) {
+      status.textContent = "晶币待触发";
+      status.dataset.active = "2";
+    } else if (state.shopBuyEnabled) {
+      status.textContent = "商城购买待触发";
+      status.dataset.active = "2";
+    } else {
+      status.textContent = "关闭";
+      status.dataset.active = "0";
     }
   }
 
@@ -1107,32 +1219,36 @@
     const typeOptions = [-1, ...new Set(itemList.map((item) => item.type).filter((value) => Number.isFinite(value)).sort((a, b) => a - b))];
     const queuedItems = normalizeState(state).bagItems;
     return `
-      <p class="sectionTitle">背包 Mock</p>
-      <label><span>启用</span><input data-field="bagEnabled" type="checkbox" ${state.bagEnabled ? "checked" : ""}></label>
-      <label><span>触发后关闭</span><input data-field="bagConsumeOnUse" type="checkbox" ${state.bagConsumeOnUse ? "checked" : ""}></label>
-      <label><span>当前选择</span><output>${escapeHtml(selectedBagItemLabel())}</output></label>
-      <label><span>发送队列</span><output>${queuedItems.length}/${MAX_BAG_ITEMS}，${escapeHtml(selectedBagItemsLabel())}</output></label>
-      <label><span>最近读取</span><output>${escapeHtml(lastReadText(state.bagLastReadAt))}</output></label>
-      <label><span>分类空位</span><output>${escapeHtml(bagSnapshotText())}</output></label>
-      <div class="row">
-        <label class="wide"><span>道具 ID</span><input data-field="bagItemId" type="number" min="1" max="999999" value="${state.bagItemId}"></label>
-        <label class="wide"><span>数量</span><input data-field="bagItemCount" type="number" min="1" max="999" value="${state.bagItemCount}"></label>
-      </div>
-      <div class="actions">
-        <button type="button" class="primary" data-action="add-bag-item">加入队列</button>
-        <button type="button" data-action="clear-bag-items">清空队列</button>
-      </div>
-      <div class="petList">${renderBagQueue()}</div>
-      <div class="row">
-        <label class="wide"><span>背包分类</span><select data-field="bagFilterBag">${bagOptions.map((value) => `<option value="${value}" ${value === state.bagFilterBag ? "selected" : ""}>${value === -1 ? "全部" : `${bagLabel(value)} / ${value}`}</option>`).join("")}</select></label>
-        <label class="wide"><span>类型</span><select data-field="bagFilterType">${typeOptions.map((value) => `<option value="${value}" ${value === state.bagFilterType ? "selected" : ""}>${value === -1 ? "全部" : `类型 ${value}`}</option>`).join("")}</select></label>
-      </div>
-      <label class="wide"><span>搜索道具</span><input data-field="itemSearch" type="search" placeholder="输入名称、ID、类型或背包"></label>
-      <div class="petList" data-role="itemList"></div>
-      <p class="hint">Bag mock runs when you click the merchant's newbie gift reissue button. The patched gift path ignores the original already-claimed check and sends this queue through BagFactory.addInBagById(id, count, 0).</p>
-      <div class="actions">
-        <button type="button" class="primary" data-action="bag-enable">开启背包</button>
-        <button type="button" data-action="bag-disable">关闭背包</button>
+      <p class="sectionTitle">发送道具</p>
+      <div class="bagLayout">
+        <div class="bagMainColumn">
+          <label><span>当前选择</span><output>${escapeHtml(selectedBagItemLabel())}</output></label>
+          <label><span>队列数量</span><output>${queuedItems.length}/${MAX_BAG_ITEMS}</output></label>
+          <label><span>最近读取</span><output>${escapeHtml(lastReadText(state.bagLastReadAt))}</output></label>
+          <label><span>分类空位</span><output>${escapeHtml(bagSnapshotText())}</output></label>
+          <div class="row">
+            <label class="wide"><span>道具 ID</span><input data-field="bagItemId" type="number" min="1" max="999999" value="${state.bagItemId}"></label>
+            <label class="wide"><span>数量</span><input data-field="bagItemCount" type="number" min="1" max="999" value="${state.bagItemCount}"></label>
+          </div>
+          <div class="actions">
+            <button type="button" class="primary" data-action="add-bag-item">加入队列</button>
+            <button type="button" data-action="clear-bag-items">清空队列</button>
+            <button type="button" class="primary" data-action="send-bag-items-now">立即发送</button>
+          </div>
+        </div>
+        <div class="bagQueueColumn">
+          <p class="sectionTitle">发送队列</p>
+          <div class="petList bagQueueList">${renderBagQueue()}</div>
+        </div>
+        <div class="bagSearchColumn">
+          <p class="sectionTitle">搜索道具</p>
+          <div class="row">
+            <label class="wide"><span>背包分类</span><select data-field="bagFilterBag">${bagOptions.map((value) => `<option value="${value}" ${value === state.bagFilterBag ? "selected" : ""}>${value === -1 ? "全部" : `${bagLabel(value)} / ${value}`}</option>`).join("")}</select></label>
+            <label class="wide"><span>类型</span><select data-field="bagFilterType">${typeOptions.map((value) => `<option value="${value}" ${value === state.bagFilterType ? "selected" : ""}>${value === -1 ? "全部" : `类型 ${value}`}</option>`).join("")}</select></label>
+          </div>
+          <label class="wide"><span>关键词</span><input data-field="itemSearch" type="search" placeholder="输入名称、ID、类型或背包"></label>
+          <div class="petList bagItemList" data-role="itemList"></div>
+        </div>
       </div>
     `;
   }
@@ -1160,6 +1276,19 @@
       <div class="actions">
         <button type="button" class="primary" data-action="currency-enable">开启晶币</button>
         <button type="button" data-action="currency-disable">关闭晶币</button>
+      </div>
+    `;
+  }
+
+  function renderShopTab() {
+    return `
+      <p class="sectionTitle">商城购买 Mock</p>
+      <label><span>启用</span><input data-field="shopBuyEnabled" type="checkbox" ${state.shopBuyEnabled ? "checked" : ""}></label>
+      <label><span>最近触发</span><output>${escapeHtml(lastReadText(state.shopBuyLastReadAt))}</output></label>
+      <p class="hint">目标是星际商城购买链路：GameShangChengS -> GameShangChengC.buyShopByClick -> Api4399.getStateAndBuyShopProp。开启后，购买按钮会跳过后端返回等待，在本地调用成功回调；关闭时继续走原官方购买流程。</p>
+      <div class="actions">
+        <button type="button" class="primary" data-action="shop-buy-enable">开启商城购买</button>
+        <button type="button" data-action="shop-buy-disable">关闭商城购买</button>
       </div>
     `;
   }
