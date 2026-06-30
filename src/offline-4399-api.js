@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const CryptoJS = require("crypto-js");
 const { state, logRequest } = require("./app-state");
+const { sanitizeSaveData } = require("./cheat-check-mock");
 
 const PAYMENT_QUERY_PATHS = new Set([
   "/exchange/v2/flash/GetMoney",
@@ -180,12 +181,16 @@ function normalizeSaveSlot(index, value, { includeEmpty = false } = {}) {
   if (!value) {
     return includeEmpty ? emptySaveSlot(index) : null;
   }
+  const data = value.data == null ? "" : String(value.data);
+  const sanitized = process.env.OFFLINE_4399_CHEAT_CHECK_MOCK === "1"
+    ? sanitizeSaveData(data)
+    : { data };
 
   return {
     index,
     title: String(value.title || localSaveTitle(index)),
     datetime: String(value.datetime || nowText()),
-    data: value.data == null ? "" : value.data,
+    data: sanitized.data,
     status: String(value.status || "0"),
   };
 }
@@ -207,12 +212,16 @@ function saveSlotsArray() {
 function writeSaveSlot(index, params) {
   const store = readSaveStore();
   const current = normalizeSaveSlot(index, store.slots?.[String(index)]);
+  const rawData = readBodyParam(params, ["data", "content", "value"], current?.data || "");
+  const sanitized = process.env.OFFLINE_4399_CHEAT_CHECK_MOCK === "1"
+    ? sanitizeSaveData(rawData)
+    : { data: rawData };
   store.slots = store.slots || {};
   store.slots[String(index)] = {
     index,
     title: readBodyParam(params, ["title", "name"], current?.title || localSaveTitle(index)),
     datetime: nowText(),
-    data: readBodyParam(params, ["data", "content", "value"], current?.data || ""),
+    data: sanitized.data,
     status: "0",
   };
   writeSaveStore(store);
